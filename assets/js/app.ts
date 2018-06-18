@@ -9,7 +9,9 @@ import {
   LEGION_RAID_ACHIEVEMENTS,
   LEGION_RAID_NAMES,
   BFA_RAID_ACHIEVEMENTS,
-  BFA_RAID_NAMES
+  BFA_RAID_NAMES,
+  LEGION_FACTIONS,
+  BFA_FACTIONS
 } from "./constants";
 import { KEY } from "./secrets";
 
@@ -22,7 +24,7 @@ const getRaceInformation = (raceIndex: number): object => {
   const raceData: string = RACES[raceIndex];
   return {
     name: raceData,
-    icon: `${raceData.toLowerCase().replace(/s+/g, "")}.svg`
+    icon: `${raceData.toLowerCase().replace(/ /g, "")}.svg`
   };
 };
 
@@ -31,7 +33,7 @@ const getClassInformation = (classIndex: number): object => {
   return {
     name: classData.name,
     color: classData.classColor,
-    icon: `${classData.name.toLowerCase().replace(/s+/g, "")}.svg`
+    icon: `${classData.name.toLowerCase().replace(/ /g, "")}.svg`
   };
 };
 
@@ -62,7 +64,6 @@ const getEquippedItems = (itemsContainer: IBlizzardItemsContainer): ICustomItemO
   };
 
   const ObjValues = Object.values(itemsContainer);
-  const ObjKeys = Object.keys(itemsContainer);
 
   ObjValues.forEach((subInfo: IBlizzardItemObj) => {
     if (typeof subInfo === "object") {
@@ -83,7 +84,7 @@ const getEquippedItems = (itemsContainer: IBlizzardItemsContainer): ICustomItemO
       }
 
       // check whether this item is enchantable
-      if (ENCHANTABLES.includes(ObjKeys[ObjValues.indexOf(subInfo)])) {
+      if (ENCHANTABLES.includes(Object.keys(itemsContainer)[ObjValues.indexOf(subInfo)])) {
         tempObj.enchant = subInfo.tooltipParams.enchant;
       }
 
@@ -131,5 +132,45 @@ const getPvERaidAchievements = (achievementContainer: IBlizzardAchievementsConta
       ce: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[1], achievementContainer),
       names: BFA_RAID_NAMES
     }
+  };
+};
+
+const extractReputationProgress = (achievementContainer: IBlizzardAchievementsContainer, factionArray: IConstFactionObj[]): (number | undefined)[] => {
+  let reputationArr: (number | undefined)[];
+  reputationArr = [];
+
+  factionArray.forEach(factionObj => {
+    // if character has encountered faction, shove current reputation progress to reputationArr, else shove 0
+    achievementContainer.criteria.includes(factionObj.id)
+      ? reputationArr.push(achievementContainer.criteriaQuantity[achievementContainer.criteria.indexOf(factionObj.id)])
+      : reputationArr.push(undefined);
+  });
+
+  return reputationArr;
+};
+
+const getReputationProgress = (achievementContainer: IBlizzardAchievementsContainer): ICustomFactionProgressObj => {
+  return {
+    Legion: extractReputationProgress(achievementContainer, LEGION_FACTIONS),
+    BfA: extractReputationProgress(achievementContainer, BFA_FACTIONS)
+  };
+};
+
+const convertReputationProgressToText = (reputation: number | undefined): object => {
+  let standing: string;
+  let progress: number;
+
+  standing = "Faction not met";
+  progress = 0;
+
+  if (typeof reputation === "number") {
+    standing = reputation < 3000 ? "Neutral" : reputation < 9000 ? "Friendly" : reputation < 21000 ? "Honored" : reputation < 42000 ? "Revered" : "Exalted";
+    progress = reputation < 3000 ? reputation : reputation < 9000 ? reputation - 3000 : reputation < 21000 ? reputation - 9000 : reputation < 42000 ? reputation - 21000 : 21000;
+  }
+
+  return {
+    standing: standing,
+    className: `faction-${standing.replace(/ /g, "").toLowerCase()}`,
+    progress: progress
   };
 };

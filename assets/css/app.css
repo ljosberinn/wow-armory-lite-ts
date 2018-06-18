@@ -21,3 +21,39 @@
 .quality-uncommon {
   color: #1eff00;
 }
+
+.progress-high {
+  background: linear-gradient(to right, #0d4a00 0, #1b9601 100%);
+}
+
+.progress-partial {
+  background: linear-gradient(to right, #7b3f00 0, #c76700 100%);
+}
+
+.progress-low {
+  background: linear-gradient(to right, #69503f 0, #99755c 100%);
+}
+
+.faction-exalted {
+  color: cyan;
+}
+
+.faction-revered {
+  color: #00ffcc;
+}
+
+.faction-honored {
+  color: #00ff88;
+}
+
+.faction-friendly {
+  color: lime;
+}
+
+.faction-neutral {
+  color: yellow;
+}
+
+.faciton-factionnotmet {
+  color: coral;
+}

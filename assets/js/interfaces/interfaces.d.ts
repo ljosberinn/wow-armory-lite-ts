@@ -189,3 +189,12 @@ interface ICustomPvEAchievementSubObj {
   ce: boolean[];
   names: string[];
 }
+
+interface IConstFactionObj {
+  name: string;
+  id: number;
+}
+
+interface ICustomFactionProgressObj {
+  [key: string]: (number | undefined)[];
+}

@@ -81,3 +81,26 @@ const BFA_CE_ACHIEVEMENTS = [12535];
 export const BFA_RAID_NAMES = ["Uldir"];
 
 export const BFA_RAID_ACHIEVEMENTS = [BFA_AOTC_ACHIEVEMENTS, BFA_CE_ACHIEVEMENTS];
+
+var test = [{ name: "Emerald Nightmare", aotc: 11194, ce: 11191 }, { name: "Trial of Valor", aotc: 11581, ce: 11580 }];
+
+export const LEGION_FACTIONS: IConstFactionObj[] = [
+  { name: "Highmountain Tribe", id: 30497 },
+  { name: "Dreamweavers", id: 30500 },
+  { name: "The Nightfallen", id: 30499 },
+  { name: "Court of Farondis", id: 30501 },
+  { name: "The Wardens", id: 30498 },
+  { name: "Armies of Legionfall", id: 35977 },
+  { name: "Argussian Reach", id: 0 },
+  { name: "Army of the Light", id: 0 },
+  { name: "Valarjar", id: 30501 }
+];
+
+export const BFA_FACTIONS: IConstFactionObj[] = [
+  { name: "", id: 0 },
+  { name: "", id: 0 },
+  { name: "", id: 0 },
+  { name: "", id: 0 },
+  { name: "", id: 0 },
+  { name: "", id: 0 }
+];
