@@ -1,5 +1,3 @@
-import rp from "request-promise";
-
 import {
   RACES,
   CLASSES,
@@ -19,7 +17,9 @@ import { KEY } from "./secrets";
 const returnAPIURL = (character: string, region: string, realm: string): string =>
   `https://${region}.api.battle.net/wow/character/${realm}/${character}?fields=items,statistics,achievements,talents&locale=en_GB&apikey=${KEY}`;
 
-const getWoWArmoryData = async (url: string): Promise<object> => await rp({ uri: url, json: true });
+//const getWoWArmoryData = async (url: string): Promise<object> => await rp({ uri: url, json: true });
+
+const getWoWArmoryData = async (url: string): Promise<object> => await fetch(url);
 
 const getRaceInformation = (raceIndex: number): object => {
   const raceData: string = RACES[raceIndex];

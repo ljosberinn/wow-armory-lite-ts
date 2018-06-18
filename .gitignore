@@ -1,6 +1,6 @@
 node_modules
 
-assets/js/dev/secrets.ts
+assets/js/secrets.ts
 
 assets/js/*.js
 
