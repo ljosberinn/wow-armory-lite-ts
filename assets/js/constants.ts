@@ -68,3 +68,16 @@ export const QUALITY_CLASSES = ["poor", "common", "uncommon", "rare", "epic", "l
 
 export const MYTHIC_PLUS_ACHIEVEMENT_LEVELS = [2, 5, 10, 15];
 export const MYTHIC_PLUS_ACHIEVEMENTS = [11183, 11184, 11185, 11162];
+
+const LEGION_AOTC_ACHIEVEMENTS = [11194, 11581, 11195, 11874, 12110];
+const LEGION_CE_ACHIEVEMENTS = [11191, 11580, 11192, 11875, 12111];
+export const LEGION_RAID_NAMES = ["Emerald Nightmare", "Trial of Valor", "The Nighthold", "Tomb of Sargeras", "Antorus, the Burning Throne"];
+
+export const LEGION_RAID_ACHIEVEMENTS = [LEGION_AOTC_ACHIEVEMENTS, LEGION_CE_ACHIEVEMENTS];
+
+// add achievement IDs and names for later raids here
+const BFA_AOTC_ACHIEVEMENTS = [125360];
+const BFA_CE_ACHIEVEMENTS = [12535];
+export const BFA_RAID_NAMES = ["Uldir"];
+
+export const BFA_RAID_ACHIEVEMENTS = [BFA_AOTC_ACHIEVEMENTS, BFA_CE_ACHIEVEMENTS];

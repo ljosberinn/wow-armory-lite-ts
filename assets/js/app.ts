@@ -1,5 +1,16 @@
 import rp from "request-promise";
-import { RACES, CLASSES, ENCHANTABLES, QUALITY_CLASSES, MYTHIC_PLUS_ACHIEVEMENT_LEVELS, MYTHIC_PLUS_ACHIEVEMENTS } from "./constants";
+import {
+  RACES,
+  CLASSES,
+  ENCHANTABLES,
+  QUALITY_CLASSES,
+  MYTHIC_PLUS_ACHIEVEMENT_LEVELS,
+  MYTHIC_PLUS_ACHIEVEMENTS,
+  LEGION_RAID_ACHIEVEMENTS,
+  LEGION_RAID_NAMES,
+  BFA_RAID_ACHIEVEMENTS,
+  BFA_RAID_NAMES
+} from "./constants";
 import { KEY } from "./secrets";
 
 const returnAPIURL = (character: string, region: string, realm: string): string =>
@@ -95,4 +106,30 @@ const getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievem
   });
 
   return { level: highestMythicPlusAchievement, timestamp: timestamp };
+};
+
+const extractRaidAchievements = (achievementConst: number[], achievementContainer: IBlizzardAchievementsContainer): boolean[] => {
+  let resultingArr: boolean[];
+  resultingArr = [];
+
+  achievementConst.forEach((achievementID: number) => {
+    resultingArr.push(achievementContainer.achievementsCompleted.includes(achievementID));
+  });
+
+  return resultingArr;
+};
+
+const getPvERaidAchievements = (achievementContainer: IBlizzardAchievementsContainer): ICustomPvEAchievementObj => {
+  return {
+    Legion: {
+      aotc: extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[0], achievementContainer),
+      ce: extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[1], achievementContainer),
+      names: LEGION_RAID_NAMES
+    },
+    BfA: {
+      aotc: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[0], achievementContainer),
+      ce: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[1], achievementContainer),
+      names: BFA_RAID_NAMES
+    }
+  };
 };

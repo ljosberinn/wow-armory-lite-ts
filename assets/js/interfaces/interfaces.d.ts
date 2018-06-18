@@ -179,3 +179,13 @@ interface ICustomMythicPlusAchievementObj {
   level: number | undefined;
   timestamp: number | undefined;
 }
+
+interface ICustomPvEAchievementObj {
+  [key: string]: ICustomPvEAchievementSubObj;
+}
+
+interface ICustomPvEAchievementSubObj {
+  aotc: boolean[];
+  ce: boolean[];
+  names: string[];
+}
