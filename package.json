@@ -4,15 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && babel assets/js/dev --out-dir assets/js --extensions \".ts,.tsx\"",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/preset-typescript": "^7.0.0-beta.49",
     "@types/request-promise": "^4.1.41",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
+    "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "stylelint-config-recommended": "^2.1.0",
     "typescript": "^2.9.2"

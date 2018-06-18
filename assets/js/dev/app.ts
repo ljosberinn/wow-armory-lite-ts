@@ -1,4 +1,5 @@
 import rp from "request-promise";
+
 import {
   RACES,
   CLASSES,
