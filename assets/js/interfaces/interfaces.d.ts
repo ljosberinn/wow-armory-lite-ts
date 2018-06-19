@@ -1,6 +1,5 @@
 interface IClassInformationDetailObj {
   name: string;
-  classColor: number[];
 }
 
 interface IClassInformationObj {
@@ -167,6 +166,7 @@ interface IBlizzardAchievementsContainer {
 interface ICustomMythicPlusAchievementObj {
   level: number | undefined;
   timestamp: number | undefined;
+  age: string | undefined;
 }
 
 interface ICustomPvEAchievementObj {

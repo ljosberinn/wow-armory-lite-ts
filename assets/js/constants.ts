@@ -18,71 +18,61 @@ export const RACES: IRaceInformationObj = {
 
 export const CLASSES: IClassInformationObj = {
   1: {
-    name: "Warrior",
-    classColor: [199, 156, 110]
+    name: "Warrior"
   },
   2: {
-    name: "Paladin",
-    classColor: [245, 140, 186]
+    name: "Paladin"
   },
   3: {
-    name: "Hunter",
-    classColor: [102, 160, 77]
+    name: "Hunter"
   },
   4: {
-    name: "Rogue",
-    classColor: [255, 245, 105]
+    name: "Rogue"
   },
   5: {
-    name: "Priest",
-    classColor: [255, 255, 255]
+    name: "Priest"
   },
   6: {
-    name: "Death Knight",
-    classColor: [196, 31, 59]
+    name: "Death Knight"
   },
   7: {
-    name: "Shaman",
-    classColor: [196, 31, 59]
+    name: "Shaman"
   },
   8: {
-    name: "Mage",
-    classColor: [0, 112, 222]
+    name: "Mage"
   },
   9: {
-    name: "Warlock",
-    classColor: [148, 130, 201]
+    name: "Warlock"
   },
   10: {
-    name: "Druid",
-    classColor: [255, 125, 10]
+    name: "Monk"
+  },
+  11: {
+    name: "Druid"
   },
   12: {
-    name: "Demon Hunter",
-    classColor: [163, 48, 201]
+    name: "Demon Hunter"
   }
 };
 
-export const ENCHANTABLES = ["hands", "finger1", "finger2", "mainHand", "offHand"];
-export const QUALITY_CLASSES = ["poor", "common", "uncommon", "rare", "epic", "legendary", "artifact", "heirloom"];
+export const ENCHANTABLES: string[] = ["hands", "finger1", "finger2", "mainHand", "offHand"];
+export const QUALITY_CLASSES: string[] = ["poor", "common", "uncommon", "rare", "epic", "legendary", "artifact", "heirloom"];
 
-export const MYTHIC_PLUS_ACHIEVEMENT_LEVELS = [2, 5, 10, 15];
-export const MYTHIC_PLUS_ACHIEVEMENTS = [11183, 11184, 11185, 11162];
+export const MYTHIC_PLUS_ACHIEVEMENT_LEVELS: number[] = [2, 5, 10, 15];
+export const MYTHIC_PLUS_ACHIEVEMENTS: number[] = [11183, 11184, 11185, 11162];
 
-const LEGION_AOTC_ACHIEVEMENTS = [11194, 11581, 11195, 11874, 12110];
-const LEGION_CE_ACHIEVEMENTS = [11191, 11580, 11192, 11875, 12111];
-export const LEGION_RAID_NAMES = ["Emerald Nightmare", "Trial of Valor", "The Nighthold", "Tomb of Sargeras", "Antorus, the Burning Throne"];
+const LEGION_AOTC_ACHIEVEMENTS: number[] = [11194, 11581, 11195, 11874, 12110];
+const LEGION_CE_ACHIEVEMENTS: number[] = [11191, 11580, 11192, 11875, 12111];
+export const LEGION_RAID_NAMES: string[] = ["Emerald Nightmare", "Trial of Valor", "The Nighthold", "Tomb of Sargeras", "Antorus, the Burning Throne"];
 
-export const LEGION_RAID_ACHIEVEMENTS = [LEGION_AOTC_ACHIEVEMENTS, LEGION_CE_ACHIEVEMENTS];
+export const LEGION_RAID_ACHIEVEMENTS: number[][] = [LEGION_AOTC_ACHIEVEMENTS, LEGION_CE_ACHIEVEMENTS];
 
 // add achievement IDs and names for later raids here
-const BFA_AOTC_ACHIEVEMENTS = [125360];
-const BFA_CE_ACHIEVEMENTS = [12535];
-export const BFA_RAID_NAMES = ["Uldir"];
+const BFA_AOTC_ACHIEVEMENTS: number[] = [125360];
+const BFA_CE_ACHIEVEMENTS: number[] = [12535];
+export const BFA_RAID_NAMES: string[] = ["Uldir"];
 
-export const BFA_RAID_ACHIEVEMENTS = [BFA_AOTC_ACHIEVEMENTS, BFA_CE_ACHIEVEMENTS];
-
-var test = [{ name: "Emerald Nightmare", aotc: 11194, ce: 11191 }, { name: "Trial of Valor", aotc: 11581, ce: 11580 }];
+export const BFA_RAID_ACHIEVEMENTS: number[][] = [BFA_AOTC_ACHIEVEMENTS, BFA_CE_ACHIEVEMENTS];
 
 export const LEGION_FACTIONS: IConstFactionObj[] = [
   { name: "Highmountain Tribe", id: 30497 },

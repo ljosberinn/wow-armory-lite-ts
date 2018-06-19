@@ -13,12 +13,12 @@ import {
   BFA_FACTIONS,
   REGIONS
 } from "./constants";
-import { Blizzard_API, Warcraftlogs_API } from "./secrets";
+import { API } from "./secrets";
 
 const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
-    `https://${region}.api.battle.net/wow/character/${realm}/${character}?fields=items,statistics,achievements,talents&locale=en_GB&apikey=${Blizzard_API}`,
-  Warcraftlogs: (character: string, region: string, realm: string): string => `https://www.warcraftlogs.com:443/v1/parses/character/${character}/${realm}/${region}?api_key=${Warcraftlogs_API}`,
+    `https://${region}.api.battle.net/wow/character/${realm}/${character}?fields=items,statistics,achievements,talents&locale=en_GB&apikey=${API.Blizzard}`,
+  Warcraftlogs: (character: string, region: string, realm: string): string => `https://www.warcraftlogs.com:443/v1/parses/character/${character}/${realm}/${region}?api_key=${API.Warcraftlogs}`,
   RaiderIO: (character: string, region: string, realm: string): string => `http://raider.io/api/v1/characters/profile?region=${region}&realm=${realm}&name=${character}&fields=mythic_plus_scores`
 };
 
@@ -65,13 +65,12 @@ const getSelectedTalents = (talentContainer: IBlizzardTalentContainer): ICustomT
 const convertQualityToClass = (quality: number): string => `quality-${QUALITY_CLASSES[quality]}`;
 
 const getEquippedItems = (items: IBlizzardItemsContainer): ICustomItemObj => {
-  let result: ICustomItemObj = {
+  const result: ICustomItemObj = {
     averageItemLevel: 0,
     averageItemLevelEquipped: 0
   };
 
-  const ObjKeys = Object.keys(items);
-  const ObjValues = Object.values(items);
+  const [ObjKeys, ObjValues] = [Object.keys(items), Object.values(items)];
 
   ObjKeys.forEach(resultProperty => {
     const currentValue: IBlizzardItemObj = ObjValues[ObjKeys.indexOf(resultProperty)];
@@ -105,6 +104,47 @@ const getEquippedItems = (items: IBlizzardItemsContainer): ICustomItemObj => {
   return result;
 };
 
+const prettyPrintSeconds = (s: number) => {
+  s <= 1 ? "just now" : void 0;
+
+  s <= 90 ? `${s} seconds` : void 0;
+
+  let m = Math.floor(s / 60);
+  if (m <= 90) {
+    let result = `${m} minute`;
+
+    m !== 1 ? (result += "s") : void 0;
+    s = Math.round((s / 60 - m) * 60);
+    s > 0 ? (result += `, ${s} second`) : void 0;
+    s > 1 ? (result += "s") : void 0;
+
+    return result;
+  }
+
+  let h = Math.floor(m / 60);
+  m = m % 60;
+
+  if (h <= 36) {
+    let result = `${h} hour`;
+
+    h !== 1 ? (result += "s") : void 0;
+    result += `, ${m} minute`;
+    m !== 1 ? (result += "s") : void 0;
+
+    return result;
+  }
+
+  let d = Math.floor(h / 24);
+  h = h % 24;
+
+  let result = `${d} day`;
+  d !== 1 ? (result += "s") : void 0;
+  result += `, ${h} hour`;
+  h !== 1 ? (result += "s") : void 0;
+
+  return result;
+};
+
 const getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievementsContainer): ICustomMythicPlusAchievementObj => {
   let highestMythicPlusAchievement = undefined;
   let timestamp = undefined;
@@ -116,7 +156,7 @@ const getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievem
     }
   });
 
-  return { level: highestMythicPlusAchievement, timestamp: timestamp };
+  return { level: highestMythicPlusAchievement, timestamp: timestamp, age: `${prettyPrintSeconds((Date.now() - timestamp) / 1000)} ago` };
 };
 
 const extractRaidAchievements = (achievementConst: number[], achievementContainer: IBlizzardAchievementsContainer): boolean[] => {
