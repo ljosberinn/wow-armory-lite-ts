@@ -46,7 +46,7 @@ interface IBlizzardItemObj {
   armor: number;
   artifactAppearanceId: number;
   artifactId: number;
-  artifactTraits: IBlizzardItemArtifactTraitsArray;
+  artifactTraits: IBlizzardItemArtifactTraitsObj[];
   bonusLists: number[];
   context: string;
   displayInfoId: number;
@@ -55,8 +55,8 @@ interface IBlizzardItemObj {
   itemLevel: number;
   name: string;
   quality: number;
-  relics: IBlizzardItemArtifactRelicsArray;
-  stats: IBlizzardItemStatsArray;
+  relics: IBlizzardItemArtifactRelicsObj[];
+  stats: IBlizzardItemStatsObj[];
   tooltipParams: IBlizzardItemTooltipParamsObj;
   weaponInfo?: IBlizzardWeaponInfoObj;
 }
@@ -84,17 +84,9 @@ interface IBlizzardItemTooltipParamsObj {
   enchant?: number;
 }
 
-interface IBlizzardItemStatsArray {
-  [key: number]: IBlizzardItemStatsObj;
-}
-
 interface IBlizzardItemStatsObj {
   stat: number;
   amount: number;
-}
-
-interface IBlizzardItemArtifactRelicsArray {
-  [key: number]: IBlizzardItemArtifactRelicsObj;
 }
 
 interface IBlizzardItemArtifactRelicsObj {
@@ -102,10 +94,6 @@ interface IBlizzardItemArtifactRelicsObj {
   itemId: number;
   context: number;
   bonusLists: number[];
-}
-
-interface IBlizzardItemArtifactTraitsArray {
-  [key: number]: IBlizzardItemArtifactTraitsObj;
 }
 
 interface IBlizzardItemArtifactTraitsObj {
@@ -198,4 +186,75 @@ interface IConstFactionObj {
 
 interface ICustomFactionProgressObj {
   [key: string]: (number | undefined)[];
+}
+
+interface IBlizzardAPIObject {
+  achievementPoints: number;
+  achievements: IBlizzardAchievementsContainer;
+  battlegroup: string;
+  calcClass: string;
+  class: number;
+  faction: number;
+  gender: number;
+  items: IBlizzardItemsContainer;
+  lastModified: number;
+  level: number;
+  name: string;
+  race: number;
+  realm: string;
+  statistics: IBlizzardStatisticsObj;
+  talents: IBlizzardTalentContainer;
+  thumbnail: string;
+  totalHonorableKills: number;
+}
+
+interface IBlizzardStatisticsObj {
+  id: number;
+  name: string;
+  subcategories: IBlizzardStatisticsSubCategories[];
+}
+
+interface IBlizzardStatisticsSubCategories {
+  id: number;
+  name: string;
+  statistics: IBlizzardStatisticsSubcategoryStatistic[];
+  subCategories: IBlizzardStatisticsSubcategorySubCategory[];
+}
+
+interface IBlizzardStatisticsSubcategoryStatistic {
+  id: number;
+  name: string;
+  quantity: any;
+  lastUpdated: any;
+  money: boolean;
+  highest: string;
+}
+
+interface IBlizzardStatisticsSubcategorySubCategory {
+  id: number;
+  name:
+    | "Character"
+    | "Combat"
+    | "Kills"
+    | "Deaths"
+    | "Quests"
+    | "Dungeons & Raids"
+    | "Skills"
+    | "Travel"
+    | "Social"
+    | "Player vs.Player"
+    | "Pet Battles"
+    | "Proving Grounds"
+    | "Class Hall"
+    | "Garrison";
+  statistics: IBlizzardStatisticsSubcategorySubcategoryStatistics[];
+}
+
+interface IBlizzardStatisticsSubcategorySubcategoryStatistics {
+  id: number;
+  name: string;
+  quantity: number;
+  lastUpdated: any;
+  money: boolean;
+  highest: string;
 }

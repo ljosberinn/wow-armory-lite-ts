@@ -97,3 +97,5 @@ export const LEGION_FACTIONS: IConstFactionObj[] = [
 ];
 
 export const BFA_FACTIONS: IConstFactionObj[] = [{ name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }];
+
+export const REGIONS: string[] = ["EU", "US"];

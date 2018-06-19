@@ -31,8 +31,6 @@ header {
   color: #ffc600;
 }
 
-/*************/
-
 /**************
 Item Raririty Colors
 **************/
@@ -60,8 +58,6 @@ Item Raririty Colors
   color: #1eff00;
 }
 
-/*************/
-
 /**************
 PvE Progress BGs
 **************/
@@ -76,8 +72,6 @@ PvE Progress BGs
 .progress-low {
   background: linear-gradient(to right, #69503f 0, #99755c 100%);
 }
-
-/*************/
 
 /**************
 Faction Progress Colors
@@ -106,5 +100,3 @@ Faction Progress Colors
 .faciton-factionnotmet {
   color: coral;
 }
-
-/*************/

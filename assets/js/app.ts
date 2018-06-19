@@ -10,16 +10,19 @@ import {
   BFA_RAID_ACHIEVEMENTS,
   BFA_RAID_NAMES,
   LEGION_FACTIONS,
-  BFA_FACTIONS
+  BFA_FACTIONS,
+  REGIONS
 } from "./constants";
-import { KEY } from "./secrets";
+import { Blizzard_API, Warcraftlogs_API } from "./secrets";
 
-const returnAPIURL = (character: string, region: string, realm: string): string =>
-  `https://${region}.api.battle.net/wow/character/${realm}/${character}?fields=items,statistics,achievements,talents&locale=en_GB&apikey=${KEY}`;
+const returnURL = {
+  Blizzard: (character: string, region: string, realm: string): string =>
+    `https://${region}.api.battle.net/wow/character/${realm}/${character}?fields=items,statistics,achievements,talents&locale=en_GB&apikey=${Blizzard_API}`,
+  Warcraftlogs: (character: string, region: string, realm: string): string => `https://www.warcraftlogs.com:443/v1/parses/character/${character}/${realm}/${region}?api_key=${Warcraftlogs_API}`,
+  RaiderIO: (character: string, region: string, realm: string): string => `http://raider.io/api/v1/characters/profile?region=${region}&realm=${realm}&name=${character}&fields=mythic_plus_scores`
+};
 
-//const getWoWArmoryData = async (url: string): Promise<object> => await rp({ uri: url, json: true });
-
-const getWoWArmoryData = async (url: string): Promise<object> =>
+const getURLData = async (url: string): Promise<object> =>
   await fetch(url).then(response => {
     return response.json();
   });
@@ -182,9 +185,13 @@ const convertReputationProgressToText = (reputation: number | undefined): object
   };
 };
 
-/*
+const validateRegion = (region: string) => REGIONS.includes(region);
+
+const returnBlizzardAvatar = (BlizzardAPIData: IBlizzardAPIObject, region: string) => `https://render-${region}.worldofwarcraft.com/character/${BlizzardAPIData.thumbnail}`;
+
 (async () => {
-  const container = await getWoWArmoryData(returnAPIURL("Xepheris", "EU", "Blackmoore"));
+  const container = await getURLData(returnURL.Blizzard("Xepheris", "EU", "Blackmoore"));
+
   console.log(getEquippedItems(container.items));
   console.log(getClassInformation(container.class));
   console.log(getReputationProgress(container.achievements));
@@ -192,5 +199,6 @@ const convertReputationProgressToText = (reputation: number | undefined): object
   console.log(getHighestMythicPlusAchievement(container.achievements));
   console.log(getPvERaidAchievements(container.achievements));
   console.log(getRaceInformation(container.race));
+  console.log(returnBlizzardAvatar(container, "EU"));
+  console.log(validateRegion("EU"));
 })();
-*/
