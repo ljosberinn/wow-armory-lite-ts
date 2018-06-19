@@ -137,11 +137,11 @@ interface IBlizzardItemsContainer {
 interface ICustomItemInfoObj {
   itemLevel: number;
   enchant?: number;
-  itemName: string;
-  itemID: number;
-  bonusList: number[];
-  armor: number;
-  quality: number;
+  itemName?: string;
+  itemID?: number;
+  bonusLists: number[];
+  armor?: number;
+  quality?: number;
   gemID?: number;
 }
 
@@ -164,6 +164,7 @@ interface ICustomItemObj {
   trinket2?: ICustomItemInfoObj;
   mainHand?: ICustomItemInfoObj;
   offHand?: ICustomItemInfoObj;
+  [key: string]: any;
 }
 
 interface IBlizzardAchievementsContainer {

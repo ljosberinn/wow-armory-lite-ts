@@ -19,7 +19,10 @@ const returnAPIURL = (character: string, region: string, realm: string): string 
 
 //const getWoWArmoryData = async (url: string): Promise<object> => await rp({ uri: url, json: true });
 
-const getWoWArmoryData = async (url: string): Promise<object> => await fetch(url);
+const getWoWArmoryData = async (url: string): Promise<object> =>
+  await fetch(url).then(response => {
+    return response.json();
+  });
 
 const getRaceInformation = (raceIndex: number): object => {
   const raceData: string = RACES[raceIndex];
@@ -48,7 +51,7 @@ const getSelectedTalents = (talentContainer: IBlizzardTalentContainer): ICustomT
   Object.values(talentContainer).forEach((possibleSpec: IBlizzardTalentContainer) => {
     if (possibleSpec.selected) {
       result.specName = possibleSpec.spec.name;
-      result.icon = `http://media.blizzard.com/wow/icons/56/${possibleSpec.spec.icon}`;
+      result.icon = `http://media.blizzard.com/wow/icons/56/${possibleSpec.spec.icon}.jpg`;
       result.role = possibleSpec.spec.role;
     }
   });
@@ -58,38 +61,41 @@ const getSelectedTalents = (talentContainer: IBlizzardTalentContainer): ICustomT
 
 const convertQualityToClass = (quality: number): string => `quality-${QUALITY_CLASSES[quality]}`;
 
-const getEquippedItems = (itemsContainer: IBlizzardItemsContainer): ICustomItemObj => {
-  const result = {
-    averageItemLevelEquipped: itemsContainer.averageItemLevelEquipped,
-    averageItemLevel: itemsContainer.averageItemLevel
+const getEquippedItems = (items: IBlizzardItemsContainer): ICustomItemObj => {
+  let result: ICustomItemObj = {
+    averageItemLevel: 0,
+    averageItemLevelEquipped: 0
   };
 
-  const ObjValues = Object.values(itemsContainer);
+  const ObjKeys = Object.keys(items);
+  const ObjValues = Object.values(items);
 
-  ObjValues.forEach((subInfo: IBlizzardItemObj) => {
-    if (typeof subInfo === "object") {
-      let tempObj: ICustomItemInfoObj;
+  ObjKeys.forEach(resultProperty => {
+    const currentValue: IBlizzardItemObj = ObjValues[ObjKeys.indexOf(resultProperty)];
 
-      tempObj = {
-        itemID: subInfo.itemLevel,
-        itemLevel: subInfo.itemLevel,
-        itemName: subInfo.name,
-        bonusList: subInfo.bonusLists,
-        armor: subInfo.armor,
-        quality: subInfo.quality
+    if (["averageItemLevel", "averageItemLevelEquipped"].includes(resultProperty)) {
+      result[resultProperty] = currentValue;
+    } else {
+      let tempObj: ICustomItemInfoObj = {
+        itemID: currentValue.itemLevel,
+        itemLevel: currentValue.itemLevel,
+        itemName: currentValue.name,
+        bonusLists: currentValue.bonusLists,
+        armor: currentValue.armor,
+        quality: currentValue.quality
       };
 
       // check for gem
-      if (tempObj.bonusList.includes(1808)) {
-        tempObj.gemID = subInfo.tooltipParams.gem0;
+      if (currentValue.bonusLists.includes(1808)) {
+        tempObj.gemID = currentValue.tooltipParams.gem0;
       }
 
       // check whether this item is enchantable
-      if (ENCHANTABLES.includes(Object.keys(itemsContainer)[ObjValues.indexOf(subInfo)])) {
-        tempObj.enchant = subInfo.tooltipParams.enchant;
+      if (ENCHANTABLES.includes(resultProperty)) {
+        tempObj.enchant = currentValue.tooltipParams.enchant;
       }
 
-      Object.assign(tempObj, result);
+      result[resultProperty] = tempObj;
     }
   });
 
@@ -175,3 +181,16 @@ const convertReputationProgressToText = (reputation: number | undefined): object
     progress: progress
   };
 };
+
+/*
+(async () => {
+  const container = await getWoWArmoryData(returnAPIURL("Xepheris", "EU", "Blackmoore"));
+  console.log(getEquippedItems(container.items));
+  console.log(getClassInformation(container.class));
+  console.log(getReputationProgress(container.achievements));
+  console.log(getSelectedTalents(container.talents));
+  console.log(getHighestMythicPlusAchievement(container.achievements));
+  console.log(getPvERaidAchievements(container.achievements));
+  console.log(getRaceInformation(container.race));
+})();
+*/

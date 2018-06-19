@@ -57,13 +57,13 @@ export const CLASSES: IClassInformationObj = {
     name: "Druid",
     classColor: [255, 125, 10]
   },
-  11: {
+  12: {
     name: "Demon Hunter",
     classColor: [163, 48, 201]
   }
 };
 
-export const ENCHANTABLES = ["hands", "finger2", "finger2", "mainHand", "offHand"];
+export const ENCHANTABLES = ["hands", "finger1", "finger2", "mainHand", "offHand"];
 export const QUALITY_CLASSES = ["poor", "common", "uncommon", "rare", "epic", "legendary", "artifact", "heirloom"];
 
 export const MYTHIC_PLUS_ACHIEVEMENT_LEVELS = [2, 5, 10, 15];
@@ -96,11 +96,4 @@ export const LEGION_FACTIONS: IConstFactionObj[] = [
   { name: "Valarjar", id: 30501 }
 ];
 
-export const BFA_FACTIONS: IConstFactionObj[] = [
-  { name: "", id: 0 },
-  { name: "", id: 0 },
-  { name: "", id: 0 },
-  { name: "", id: 0 },
-  { name: "", id: 0 },
-  { name: "", id: 0 }
-];
+export const BFA_FACTIONS: IConstFactionObj[] = [{ name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }, { name: "", id: 0 }];

@@ -1,3 +1,41 @@
+/**************
+Geenral Customization
+**************/
+
+body {
+  background-color: #193549;
+  color: #e1efff;
+}
+
+.primary {
+  color: #9effff;
+}
+
+.secondary {
+  color: #80ffbb;
+}
+
+.alert {
+  color: #ff9d00;
+}
+
+.success {
+  color: #a5ff90;
+}
+
+.warning {
+  color: #ff628c;
+}
+
+header {
+  color: #ffc600;
+}
+
+/*************/
+
+/**************
+Item Raririty Colors
+**************/
 .quality-rare {
   color: #0070ff;
 }
@@ -22,6 +60,11 @@
   color: #1eff00;
 }
 
+/*************/
+
+/**************
+PvE Progress BGs
+**************/
 .progress-high {
   background: linear-gradient(to right, #0d4a00 0, #1b9601 100%);
 }
@@ -33,6 +76,12 @@
 .progress-low {
   background: linear-gradient(to right, #69503f 0, #99755c 100%);
 }
+
+/*************/
+
+/**************
+Faction Progress Colors
+**************/
 
 .faction-exalted {
   color: cyan;
@@ -57,3 +106,5 @@
 .faciton-factionnotmet {
   color: coral;
 }
+
+/*************/

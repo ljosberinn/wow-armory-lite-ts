@@ -4,3 +4,5 @@ dist/*
 package-lock.json
 // parcelJS cache
 .cache
+
+assets/css/*.min.css
