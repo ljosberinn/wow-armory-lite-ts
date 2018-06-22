@@ -1,0 +1,104 @@
+@media only screen and (max-width: 375px) {
+  body .page .all-cards .game-card p {
+    font-size: 18px !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    overflow-y: scroll !important;
+    height: 150%;
+  }
+  .header {
+    .inline-menu {
+      li {
+        padding-bottom: 10px;
+      }
+    }
+    .hamburger {
+      display: block;
+    }
+  }
+  body {
+    .page {
+      &.shrink {
+        @include shrink(1);
+      }
+      .fullscreenimg {
+        display: none !important;
+      }
+      h1 {
+        text-align: center;
+        margin: 0.7em;
+      }
+      .all-cards {
+        .game-card {
+          margin-bottom: 0.5em;
+          &:last-child {
+            margin-bottom: 1em;
+          }
+          %padding {
+            padding: 10px;
+          }
+          p {
+            font-size: 20px;
+            @extend %padding;
+          }
+          i {
+            @extend %padding;
+          }
+        }
+        .all-game-card-regions {
+          padding-left: 15px;
+          padding-right: 15px;
+          .game-card-regions {
+            &.open {
+              width: 100%;
+            }
+            .region {
+              .name {
+                padding-bottom: 10px;
+                width: 100%;
+                text-align: center;
+              }
+              .build {
+                padding-top: 0;
+                padding-bottom: 0;
+                width: 100%;
+                text-align: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1366px) {
+  .patch-notes {
+    .notes {
+      .note-content {
+        height: 450px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  .patch-notes {
+    .menu {
+      width: 30%;
+    }
+  }
+}
+
+@media only screen and (max-width: 1680px) {
+  .patch-notes {
+    .menu {
+      ul li {
+        font-size: 14px;
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+.fadeIn200,
+.fadeIn400,
+.fadeIn600,
+.fadeIn800,
+.fadeInOut200,
+.fadeInOut400,
+.fadeInOut600,
+.fadeInOut800 {
+  display: block !important;
+  animation-name: fadeIn;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+}
+
+.fadeInOut200,
+.fadeInOut400,
+.fadeInOut600,
+.fadeInOut800 {
+  animation-iteration-count: 2;
+}
+
+.fadeInOut200,
+.fadeIn200 {
+  animation-duration: 200ms;
+}
+
+.fadeInOut400,
+.fadeIn400 {
+  animation-duration: 400ms;
+}
+
+.fadeInOut600,
+.fadeIn600 {
+  animation-duration: 600ms;
+}
+
+.fadeInOut800,
+.fadeIn800 {
+  animation-duration: 800ms;
+}
+
+@keyframes glow-epic {
+  0%,
+  100% {
+    box-shadow: 0 0 5px $epic;
+  }
+  40%,
+  60% {
+    box-shadow: 0 0 25px $epic;
+  }
+}
+
+.button-glow-epic {
+  animation: glow-epic 5s infinite;
+}
+
+@keyframes glow-rare {
+  0%,
+  100% {
+    box-shadow: 0 0 5px $rare;
+  }
+  40%,
+  60% {
+    box-shadow: 0 0 25px $rare;
+  }
+}
+
+.button-glow-rare {
+  animation: glow-rare 5s infinite;
+}
+
+@keyframes glow-uncommon {
+  0%,
+  100% {
+    box-shadow: 0 0 5px $uncommon;
+  }
+  40%,
+  60% {
+    box-shadow: 0 0 25px $uncommon;
+  }
+}
+
+.button-glow-uncommon {
+  animation: glow-rare 5s infinite;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

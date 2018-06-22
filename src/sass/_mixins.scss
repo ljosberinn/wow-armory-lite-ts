@@ -1,0 +1,40 @@
+@mixin transition($what, $time, $style) {
+  transition: $what $time $style;
+  -ms-transition: $what $time $style;
+  -webkit-transition: $what $time $style;
+  -o-transition: $what $time $style;
+  -moz-transition: $what $time $style;
+}
+
+@mixin shrink($amount) {
+  transform: scale($amount);
+  -ms-transform: scale($amount);
+  -webkit-transform: scale($amount);
+  -o-transform: scale($amount);
+  -moz-transform: scale($amount);
+  transform-origin: 0;
+}
+
+@mixin centerout($axis) {
+  @if $axis=="x" {
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+  }
+  @if $axis=="y" {
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+  }
+  @if $axis=="xy" {
+    transform: translate(-50%);
+    -ms-transform: translate(-50%);
+    -webkit-transform: translate(-50%);
+    -o-transform: translate(-50%);
+    -moz-transform: translate(-50%);
+  }
+}

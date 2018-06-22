@@ -14,6 +14,7 @@ import {
   REGIONS
 } from "./constants";
 import { API } from "./secrets";
+import { initialize } from "./visuals";
 
 const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
@@ -39,7 +40,6 @@ const getClassInformation = (classIndex: number): object => {
   const classData: IClassInformationDetailObj = CLASSES[classIndex];
   return {
     name: classData.name,
-    color: classData.classColor,
     icon: `${classData.name.toLowerCase().replace(/ /g, "")}.svg`
   };
 };
@@ -147,7 +147,7 @@ const prettyPrintSeconds = (s: number) => {
 
 const getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievementsContainer): ICustomMythicPlusAchievementObj => {
   let highestMythicPlusAchievement = undefined;
-  let timestamp = undefined;
+  let timestamp: number | undefined = undefined;
 
   MYTHIC_PLUS_ACHIEVEMENTS.forEach(achievementID => {
     if (achievementContainer.achievementsCompleted.includes(achievementID)) {
@@ -228,6 +228,8 @@ const convertReputationProgressToText = (reputation: number | undefined): object
 const validateRegion = (region: string) => REGIONS.includes(region);
 
 const returnBlizzardAvatar = (BlizzardAPIData: IBlizzardAPIObject, region: string) => `https://render-${region}.worldofwarcraft.com/character/${BlizzardAPIData.thumbnail}`;
+
+initialize();
 
 (async () => {
   const container = await getURLData(returnURL.Blizzard("Xepheris", "EU", "Blackmoore"));

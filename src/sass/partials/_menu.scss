@@ -1,0 +1,31 @@
+.games-menu {
+    background: $menu-background-color;
+    display: inline-block;
+    height: 100%;
+    float: left;
+    ul {
+        margin: 1em 5px;
+        li {
+            position: relative;
+            padding-bottom: 10px;
+            &.clicked {
+                img {
+                    opacity: 1;
+                }
+            }
+            img {
+                width: 45px;
+                margin: 0 auto;
+                float: none;
+                display: block;
+                opacity: .5;
+                @include transition(all, .2s, ease-in-out);
+                &:hover {
+                    cursor: pointer;
+                    transform: scale(1.2);
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

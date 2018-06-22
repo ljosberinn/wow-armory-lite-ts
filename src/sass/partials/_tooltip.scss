@@ -1,0 +1,15 @@
+.customTooltip {
+    display: none;
+    position: absolute;
+    text-align: center;
+    background: $menu-background-color;
+    color: $main-font-white;
+    left: 50px;
+    top: 5px;
+    font-size: 20px;
+    padding: 10px;
+    z-index: 999;
+    &.shown {
+        opacity: 1;
+    }
+}

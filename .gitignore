@@ -1,8 +1,7 @@
 node_modules
-assets/js/secrets.ts
-dist/*
 package-lock.json
-// parcelJS cache
-.cache
+src/ts/secrets.ts
 
-assets/css/*.min.css
+// parcelJS
+dist/*
+.cache

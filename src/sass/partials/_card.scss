@@ -1,0 +1,81 @@
+.all-cards {
+  display: block;
+  margin: 0 auto;
+  margin-left: 50%;
+  float: left;
+  @include centerout("x");
+  @include transition(all, 0.2s, ease-in-out);
+  /*.all-game-card-regions {
+    @include transition(all, 0.2s, ease-in-out);
+  }*/
+  .game-card {
+    background-color: lighten($body-background-color, 15%);
+    color: $main-font-white;
+    opacity: 0.5;
+    margin-bottom: 1em;
+    @include transition(all, 0.2s, ease-in-out);
+    &:hover {
+      opacity: 0.7;
+      cursor: pointer;
+    }
+    &.open {
+      opacity: 1;
+    }
+    p {
+      display: inline-block;
+      font-size: 25px;
+      padding: 1em;
+    }
+    i {
+      float: right;
+      font-size: 20px;
+      padding: 1.4em;
+      padding-left: 0;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .game-card-regions {
+    @include transition(max-height, 600ms, ease-in-out);
+    overflow: hidden;
+    max-height: 0;
+    min-height: 0;
+    color: $main-font-white;
+    background-color: lighten($body-background-color, 20%);
+    padding: 0;
+    width: 0;
+    &.opened-flag {
+      max-height: 600px;
+    }
+    &.open {
+      width: 50%;
+    }
+    .region {
+      @include transition(all, 0.2s, ease-in-out);
+      opacity: 0;
+      &:hover {
+        background-color: lighten($body-background-color, 10%);
+      }
+      &.showText {
+        opacity: 1;
+      }
+      .name {
+        display: inline-block;
+        font-size: 25px;
+        padding: 1em;
+        &:hover {
+          cursor: default;
+        }
+      }
+      .build {
+        float: right;
+        font-size: 15px;
+        padding: 2em;
+        &:hover {
+          cursor: default;
+        }
+      }
+    }
+  }
+}
