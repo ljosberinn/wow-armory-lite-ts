@@ -7,16 +7,15 @@ import {
   MYTHIC_PLUS_ACHIEVEMENTS,
   LEGION_RAID_ACHIEVEMENTS,
   LEGION_RAID_NAMES,
-  LEGION_RAID_IDS,
   BFA_RAID_ACHIEVEMENTS,
   BFA_RAID_NAMES,
-  BFA_RAID_IDS,
+  RAID_IDS,
   LEGION_FACTIONS,
   BFA_FACTIONS,
-  REGIONS
-} from "./constants";
-import { API } from "./secrets";
-import { initialize } from "./visuals";
+  REGIONS,
+} from './constants';
+import { API } from './secrets';
+import { initialize } from './visuals';
 
 const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
@@ -25,41 +24,39 @@ const returnURL = {
     let zoneURLs: string[];
     zoneURLs = [];
 
-    LEGION_RAID_IDS.forEach(id => {
+    RAID_IDS.forEach(id => {
       zoneURLs.push(`https://www.warcraftlogs.com:443/v1/parses/character/${character}/${realm}/${region}?zone=${id}&api_key=${API.Warcraftlogs}`);
     });
 
     return zoneURLs;
   },
-  RaiderIO: (character: string, region: string, realm: string): string => `http://raider.io/api/v1/characters/profile?region=${region}&realm=${realm}&name=${character}&fields=mythic_plus_scores`
+  RaiderIO: (character: string, region: string, realm: string): string =>
+    `http://raider.io/api/v1/characters/profile?region=${region}&realm=${realm}&name=${character}&fields=gear,raid_progression,mythic_plus_scores,mythic_plus_best_runs,mythic_plus_highest_level_runs,mythic_plus_weekly_highest_level_runs,previous_mythic_plus_scores,previous_mythic_plus_ranks`,
 };
 
-const getURLData = async (url: string): Promise<object> =>
-  await fetch(url).then(response => {
-    return response.json();
-  });
+const getURLData = async (url: string): Promise<object> => await fetch(url).then(response => response.json());
 
-const getRaceInformation = (raceIndex: number): object => {
+const getRaceInformation = (raceIndex: number) => {
   const raceData: string = RACES[raceIndex];
   return {
     name: raceData,
-    icon: `${raceData.toLowerCase().replace(/ /g, "")}.svg`
+    icon: `${raceData.toLowerCase().replace(/ /g, '')}.svg`,
   };
 };
 
-const getClassInformation = (classIndex: number): object => {
+const getClassInformation = (classIndex: number) => {
   const classData: IClassInformationDetailObj = CLASSES[classIndex];
   return {
     name: classData.name,
-    icon: `${classData.name.toLowerCase().replace(/ /g, "")}.svg`
+    icon: `${classData.name.toLowerCase().replace(/ /g, '')}.svg`,
   };
 };
 
-const getSelectedTalents = (talentContainer: IBlizzardTalentContainer): ICustomTalentObj => {
-  const result = {
-    specName: "",
-    icon: "",
-    role: ""
+const getSelectedTalents = (talentContainer: IBlizzardTalentContainer) => {
+  const result: ICustomTalentObj = {
+    specName: '',
+    icon: '',
+    role: '',
   };
 
   Object.values(talentContainer).forEach((possibleSpec: IBlizzardTalentContainer) => {
@@ -75,10 +72,10 @@ const getSelectedTalents = (talentContainer: IBlizzardTalentContainer): ICustomT
 
 const convertQualityToClass = (quality: number): string => `quality-${QUALITY_CLASSES[quality]}`;
 
-const getEquippedItems = (items: IBlizzardItemsContainer): ICustomItemObj => {
+const getEquippedItems = (items: IBlizzardItemsContainer) => {
   const result: ICustomItemObj = {
     averageItemLevel: 0,
-    averageItemLevelEquipped: 0
+    averageItemLevelEquipped: 0,
   };
 
   const [ObjKeys, ObjValues] = [Object.keys(items), Object.values(items)];
@@ -86,16 +83,16 @@ const getEquippedItems = (items: IBlizzardItemsContainer): ICustomItemObj => {
   ObjKeys.forEach(resultProperty => {
     const currentValue: IBlizzardItemObj = ObjValues[ObjKeys.indexOf(resultProperty)];
 
-    if (["averageItemLevel", "averageItemLevelEquipped"].includes(resultProperty)) {
+    if (['averageItemLevel', 'averageItemLevelEquipped'].includes(resultProperty)) {
       result[resultProperty] = currentValue;
     } else {
-      let tempObj: ICustomItemInfoObj = {
+      const tempObj: ICustomItemInfoObj = {
         itemID: currentValue.itemLevel,
         itemLevel: currentValue.itemLevel,
         itemName: currentValue.name,
         bonusLists: currentValue.bonusLists,
         armor: currentValue.armor,
-        quality: currentValue.quality
+        quality: currentValue.quality,
       };
 
       // check for gem
@@ -116,7 +113,7 @@ const getEquippedItems = (items: IBlizzardItemsContainer): ICustomItemObj => {
 };
 
 const prettyPrintSeconds = (s: number) => {
-  s <= 1 ? "just now" : void 0;
+  s <= 1 ? 'just now' : void 0;
 
   s <= 90 ? `${s} seconds` : void 0;
 
@@ -124,41 +121,41 @@ const prettyPrintSeconds = (s: number) => {
   if (m <= 90) {
     let result = `${m} minute`;
 
-    m !== 1 ? (result += "s") : void 0;
+    m !== 1 ? (result += 's') : void 0;
     s = Math.round((s / 60 - m) * 60);
     s > 0 ? (result += `, ${s} second`) : void 0;
-    s > 1 ? (result += "s") : void 0;
+    s > 1 ? (result += 's') : void 0;
 
     return result;
   }
 
   let h = Math.floor(m / 60);
-  m = m % 60;
+  m %= 60;
 
   if (h <= 36) {
     let result = `${h} hour`;
 
-    h !== 1 ? (result += "s") : void 0;
+    h !== 1 ? (result += 's') : void 0;
     result += `, ${m} minute`;
-    m !== 1 ? (result += "s") : void 0;
+    m !== 1 ? (result += 's') : void 0;
 
     return result;
   }
 
-  let d = Math.floor(h / 24);
-  h = h % 24;
+  const d = Math.floor(h / 24);
+  h %= 24;
 
   let result = `${d} day`;
-  d !== 1 ? (result += "s") : void 0;
+  d !== 1 ? (result += 's') : void 0;
   result += `, ${h} hour`;
-  h !== 1 ? (result += "s") : void 0;
+  h !== 1 ? (result += 's') : void 0;
 
   return result;
 };
 
 const getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievementsContainer): ICustomMythicPlusAchievementObj => {
-  let highestMythicPlusAchievement = undefined;
-  let timestamp: number | undefined = undefined;
+  let highestMythicPlusAchievement;
+  let timestamp: number = Date.now();
 
   MYTHIC_PLUS_ACHIEVEMENTS.forEach(achievementID => {
     if (achievementContainer.achievementsCompleted.includes(achievementID)) {
@@ -167,12 +164,11 @@ const getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievem
     }
   });
 
-  return { level: highestMythicPlusAchievement, timestamp: timestamp, age: `${prettyPrintSeconds((Date.now() - timestamp) / 1000)} ago` };
+  return { level: highestMythicPlusAchievement, timestamp, age: `${prettyPrintSeconds((Date.now() - timestamp!) / 1000)} ago` };
 };
 
 const extractRaidAchievements = (achievementConst: number[], achievementContainer: IBlizzardAchievementsContainer): boolean[] => {
-  let resultingArr: boolean[];
-  resultingArr = [];
+  const resultingArr: boolean[] = [];
 
   achievementConst.forEach((achievementID: number) => {
     resultingArr.push(achievementContainer.achievementsCompleted.includes(achievementID));
@@ -181,24 +177,21 @@ const extractRaidAchievements = (achievementConst: number[], achievementContaine
   return resultingArr;
 };
 
-const getPvERaidAchievements = (achievementContainer: IBlizzardAchievementsContainer): ICustomPvEAchievementObj => {
-  return {
-    Legion: {
-      aotc: extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[0], achievementContainer),
-      ce: extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[1], achievementContainer),
-      names: LEGION_RAID_NAMES
-    },
-    BfA: {
-      aotc: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[0], achievementContainer),
-      ce: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[1], achievementContainer),
-      names: BFA_RAID_NAMES
-    }
-  };
-};
+const getPvERaidAchievements = (achievementContainer: IBlizzardAchievementsContainer): ICustomPvEAchievementObj => ({
+  Legion: {
+    aotc: extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[0], achievementContainer),
+    ce: extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[1], achievementContainer),
+    names: LEGION_RAID_NAMES,
+  },
+  BfA: {
+    aotc: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[0], achievementContainer),
+    ce: extractRaidAchievements(BFA_RAID_ACHIEVEMENTS[1], achievementContainer),
+    names: BFA_RAID_NAMES,
+  },
+});
 
 const extractReputationProgress = (achievementContainer: IBlizzardAchievementsContainer, factionArray: IConstFactionObj[]): (number | undefined)[] => {
-  let reputationArr: (number | undefined)[];
-  reputationArr = [];
+  const reputationArr: (number | undefined)[] = [];
 
   factionArray.forEach(factionObj => {
     // if character has encountered faction, shove current reputation progress to reputationArr, else shove 0
@@ -210,29 +203,24 @@ const extractReputationProgress = (achievementContainer: IBlizzardAchievementsCo
   return reputationArr;
 };
 
-const getReputationProgress = (achievementContainer: IBlizzardAchievementsContainer): ICustomFactionProgressObj => {
-  return {
-    Legion: extractReputationProgress(achievementContainer, LEGION_FACTIONS),
-    BfA: extractReputationProgress(achievementContainer, BFA_FACTIONS)
-  };
-};
+const getReputationProgress = (achievementContainer: IBlizzardAchievementsContainer): ICustomFactionProgressObj => ({
+  Legion: extractReputationProgress(achievementContainer, LEGION_FACTIONS),
+  BfA: extractReputationProgress(achievementContainer, BFA_FACTIONS),
+});
 
 const convertReputationProgressToText = (reputation: number | undefined): object => {
-  let standing: string;
-  let progress: number;
+  let standing = 'Faction not met';
+  let progress = 0;
 
-  standing = "Faction not met";
-  progress = 0;
-
-  if (typeof reputation === "number") {
-    standing = reputation < 3000 ? "Neutral" : reputation < 9000 ? "Friendly" : reputation < 21000 ? "Honored" : reputation < 42000 ? "Revered" : "Exalted";
+  if (typeof reputation === 'number') {
+    standing = reputation < 3000 ? 'Neutral' : reputation < 9000 ? 'Friendly' : reputation < 21000 ? 'Honored' : reputation < 42000 ? 'Revered' : 'Exalted';
     progress = reputation < 3000 ? reputation : reputation < 9000 ? reputation - 3000 : reputation < 21000 ? reputation - 9000 : reputation < 42000 ? reputation - 21000 : 21000;
   }
 
   return {
-    standing: standing,
-    className: `faction-${standing.replace(/ /g, "").toLowerCase()}`,
-    progress: progress
+    standing,
+    className: `faction-${standing.replace(/ /g, '').toLowerCase()}`,
+    progress,
   };
 };
 
@@ -240,29 +228,26 @@ const validateRegion = (region: string) => REGIONS.includes(region);
 
 const returnBlizzardAvatar = (BlizzardAPIData: IBlizzardAPIObject, region: string) => `https://render-${region}.worldofwarcraft.com/character/${BlizzardAPIData.thumbnail}`;
 
-const splitWarcraftlogsByDifficulty = (response: IWarcraftlogsAPIObject[]): ICustomWarcraftlogsObject => {
-  const responseJSON = {
+const splitWarcraftlogsByDifficulty = (response: IWarcraftlogsAPIObject[]) => {
+  const obj: ICustomWarcraftlogsObject = {
     lfr: [],
     normal: [],
     heroic: [],
-    mythic: []
+    mythic: [],
   };
 
   response.forEach(logData => {
     const diff = logData.difficulty;
     const cleanedUpLog = cleanUpLogData(logData);
 
-    diff === 5
-      ? responseJSON.mythic.push(cleanedUpLog)
-      : diff === 4 ? responseJSON.heroic.push(cleanedUpLog) : diff === 3 ? responseJSON.normal.push(cleanedUpLog) : diff === 1 ? responseJSON.lfr.push(cleanedUpLog) : void 0;
+    diff === 5 ? obj.mythic.push(cleanedUpLog) : diff === 4 ? obj.heroic.push(cleanedUpLog) : diff === 3 ? obj.normal.push(cleanedUpLog) : diff === 1 ? obj.lfr.push(cleanedUpLog) : void 0;
   });
 
-  return responseJSON;
+  return obj;
 };
 
 const cleanUpLogDataSpec = (specs: IWarcraftlogsAPISpecs[]) => {
-  let arr: IWarcraftlogsAPICleanSpec[];
-  arr = [];
+  const arr: IWarcraftlogsAPICleanSpec[] = [];
 
   specs.forEach(originalLogSpec => {
     arr.push({
@@ -273,29 +258,32 @@ const cleanUpLogDataSpec = (specs: IWarcraftlogsAPISpecs[]) => {
       killCount: originalLogSpec.historical_total,
       historical_avg: originalLogSpec.historical_avg,
       historical_median: originalLogSpec.historical_median,
-      spec: originalLogSpec.spec
+      spec: originalLogSpec.spec,
     });
   });
 
   return arr;
 };
-const cleanUpLogData = (logData: IWarcraftlogsAPIObject): IWarcraftlogsAPICleanObject => {
-  return {
-    kill: logData.kill,
-    name: logData.name,
-    size: logData.size,
-    specs: cleanUpLogDataSpec(logData.specs)
-  };
-};
+
+const cleanUpLogData = (logData: IWarcraftlogsAPIObject): IWarcraftlogsAPICleanObject => ({
+  kill: logData.kill,
+  name: logData.name,
+  size: logData.size,
+  specs: cleanUpLogDataSpec(logData.specs),
+});
 
 initialize();
 
 (async () => {
-  const URLS = returnURL.Warcraftlogs("Shakib", "US", "Turalyon");
+  /* WARCRAFTLOGS ACCESS
+  const URLS = returnURL.Warcraftlogs('Shakib', 'US', 'Turalyon');
+  const RAID_NAMES = LEGION_RAID_NAMES.concat(BFA_RAID_NAMES);
 
   URLS.forEach(async url => {
     const data = await getURLData(url);
-
-    console.log(splitWarcraftlogsByDifficulty(data));
+    console.log(RAID_NAMES[URLS.indexOf(url)], splitWarcraftlogsByDifficulty(data);
   });
+
+  */
+  console.log(await getURLData(returnURL.RaiderIO('Shakib', 'US', 'Turalyon')));
 })();

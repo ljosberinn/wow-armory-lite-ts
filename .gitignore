@@ -5,3 +5,4 @@ src/ts/secrets.ts
 // parcelJS
 dist/*
 .cache
+classConversionAnnotations.txt

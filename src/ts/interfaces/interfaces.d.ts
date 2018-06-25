@@ -233,20 +233,20 @@ interface IBlizzardStatisticsSubcategoryStatistic {
 interface IBlizzardStatisticsSubcategorySubCategory {
   id: number;
   name:
-    | "Character"
-    | "Combat"
-    | "Kills"
-    | "Deaths"
-    | "Quests"
-    | "Dungeons & Raids"
-    | "Skills"
-    | "Travel"
-    | "Social"
-    | "Player vs.Player"
-    | "Pet Battles"
-    | "Proving Grounds"
-    | "Class Hall"
-    | "Garrison";
+    | 'Character'
+    | 'Combat'
+    | 'Kills'
+    | 'Deaths'
+    | 'Quests'
+    | 'Dungeons & Raids'
+    | 'Skills'
+    | 'Travel'
+    | 'Social'
+    | 'Player vs.Player'
+    | 'Pet Battles'
+    | 'Proving Grounds'
+    | 'Class Hall'
+    | 'Garrison';
   statistics: IBlizzardStatisticsSubcategorySubcategoryStatistics[];
 }
 
@@ -325,10 +325,10 @@ interface IWarcraftlogsAPISpecs {
   spec: string;
 }
 interface ICustomWarcraftlogsObject {
-  lfr: IWarcraftlogsAPIObject[];
-  normal: IWarcraftlogsAPIObject[];
-  heroic: IWarcraftlogsAPIObject[];
-  mythic: IWarcraftlogsAPIObject[];
+  lfr: IWarcraftlogsAPICleanObject[];
+  normal: IWarcraftlogsAPICleanObject[];
+  heroic: IWarcraftlogsAPICleanObject[];
+  mythic: IWarcraftlogsAPICleanObject[];
 }
 
 interface IWarcraftlogsAPICleanObject {

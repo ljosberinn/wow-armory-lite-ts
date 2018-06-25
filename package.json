@@ -20,6 +20,7 @@
     "parcel-bundler": "^1.9.1",
     "stylelint": "^9.3.0",
     "stylelint-config-recommended": "^2.1.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "typescript-eslint-parser": "^16.0.0"
   }
 }
