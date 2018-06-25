@@ -5,10 +5,10 @@
   float: left;
   @include centerout("x");
   @include transition(all, 0.2s, ease-in-out);
-  /*.all-game-card-regions {
+  /*.cards-right-wrapper {
     @include transition(all, 0.2s, ease-in-out);
   }*/
-  .game-card {
+  .card-left {
     background-color: lighten($body-background-color, 15%);
     color: $main-font-white;
     opacity: 0.5;
@@ -36,7 +36,7 @@
       }
     }
   }
-  .game-card-regions {
+  .card-right {
     @include transition(max-height, 600ms, ease-in-out);
     overflow: hidden;
     max-height: 0;

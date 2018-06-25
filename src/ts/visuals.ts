@@ -25,25 +25,25 @@ const toggleText = (target: string, state: string) => Array.from(document.queryS
 
 const cards: { open: Function; close: Function; openClose: Function; openFirstCard: Function } = {
   open: (card: string) => {
-    const gameCardRegionsSubclass = <HTMLElement>document.querySelector(`.game-card-regions.${card}`);
+    const gameCardRegionsSubclass = <HTMLElement>document.querySelector(`.card-right.${card}`);
     if (gameCardRegionsSubclass !== null) {
       gameCardRegionsSubclass.classList.add("opened-flag");
 
       setTimeout(() => {
-        toggleText(`.game-card-regions.${card} .region`, "show");
+        toggleText(`.card-right.${card} .region`, "show");
       }, 400);
     }
   },
   close: (cb: Function) => {
     const recentlyClicked = (<HTMLElement>document.querySelector(".flag-recently-clicked")).classList;
-    const openRegionInfo = (<HTMLElement>document.querySelector(".game-card.open")).dataset.type;
-    toggleText(`.game-card-regions.${openRegionInfo} .region`, "hide");
+    const openRegionInfo = (<HTMLElement>document.querySelector(".card-left.open")).dataset.type;
+    toggleText(`.card-right.${openRegionInfo} .region`, "hide");
 
     setTimeout(() => {
-      (<HTMLElement>document.querySelector(`.game-card-regions.${openRegionInfo}`)).classList.remove("opened-flag");
+      (<HTMLElement>document.querySelector(`.card-right.${openRegionInfo}`)).classList.remove("opened-flag");
 
       setTimeout(() => {
-        (<HTMLElement>document.querySelector(".game-card.open")).classList.remove("open");
+        (<HTMLElement>document.querySelector(".card-left.open")).classList.remove("open");
         recentlyClicked.add("open");
         recentlyClicked.remove("flag-recently-clicked");
         cb();
@@ -56,14 +56,14 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
     });
   },
   openFirstCard: () => {
-    const openGame = <HTMLElement>document.querySelector(".all-cards .game-cards .open");
+    const openGame = <HTMLElement>document.querySelector(".all-cards .cards-left-wrapper .open");
 
     adjustCardWidth();
 
     if (openGame) {
       cards.open(openGame.dataset.type);
     } else {
-      const openCard = document.querySelector(".page.show .game-cards");
+      const openCard = document.querySelector(".page.show .cards-left-wrapper");
 
       if (openCard) {
         const firstGame = openCard.querySelectorAll("div")[0];
@@ -77,7 +77,7 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
 
 const adjustCardWidth = () => {
   Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".all-cards")).forEach(card => (card.style.width = window.innerWidth <= 1024 ? "100%" : "80%"));
-  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".game-cards")).forEach(card => (card.style.width = window.innerWidth <= 768 ? "100%" : "50%"));
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".cards-left-wrapper")).forEach(card => (card.style.width = window.innerWidth <= 768 ? "100%" : "50%"));
 };
 
 const unloadPage: Function = (newScreenID: string) => {
@@ -90,9 +90,9 @@ const unloadPage: Function = (newScreenID: string) => {
   const screen = (<HTMLElement>document.querySelector(`.page.${newScreenID}`)).classList;
   ["shrink", "show"].forEach(className => screen.add(className));
 
-  document.querySelectorAll(".game-card")[0].classList.remove("open");
+  (<HTMLElement>document.querySelector(".card-left.open")).classList.remove("open");
 
-  const currentlyFlagged = <HTMLElement>document.querySelector(".game-card-regions.opened-flag");
+  const currentlyFlagged = <HTMLElement>document.querySelector(".card-right.opened-flag");
   if (currentlyFlagged) currentlyFlagged.classList.remove("opened-flag");
 
   setTimeout(cards.openFirstCard, 600);
@@ -206,7 +206,7 @@ const initializeFirstPageLoad = () => {
 };
 
 const initializeCardOnClick = () => {
-  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".game-card")).forEach(card => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".card-left")).forEach(card => {
     card.addEventListener("click", e => {
       if (e.target!.localName === "i") return;
 
@@ -220,7 +220,7 @@ const initializeCardOnClick = () => {
 
 export const initialize = () => {
   document.addEventListener("DOMContentLoaded", () => {
-    Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".game-card-regions")).forEach(el => el.classList.add("open"));
+    Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".card-right")).forEach(el => el.classList.add("open"));
 
     initializeHamburger();
     initializeSideBarListItems();
