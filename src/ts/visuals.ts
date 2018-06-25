@@ -35,15 +35,15 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
     }
   },
   close: (cb: Function) => {
-    const recentlyClicked = document.querySelectorAll(".flag-recently-clicked")[0].classList;
-    const openRegionInfo = (<HTMLElement>document.querySelectorAll(".game-card.open")[0]).dataset.type;
+    const recentlyClicked = (<HTMLElement>document.querySelector(".flag-recently-clicked")).classList;
+    const openRegionInfo = (<HTMLElement>document.querySelector(".game-card.open")).dataset.type;
     toggleText(`.game-card-regions.${openRegionInfo} .region`, "hide");
 
     setTimeout(() => {
-      document.querySelectorAll(`.game-card-regions.${openRegionInfo}`)[0].classList.remove("opened-flag");
+      (<HTMLElement>document.querySelector(`.game-card-regions.${openRegionInfo}`)).classList.remove("opened-flag");
 
       setTimeout(() => {
-        document.querySelectorAll(".game-card.open")[0].classList.remove("open");
+        (<HTMLElement>document.querySelector(".game-card.open")).classList.remove("open");
         recentlyClicked.add("open");
         recentlyClicked.remove("flag-recently-clicked");
         cb();
@@ -56,18 +56,18 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
     });
   },
   openFirstCard: () => {
-    const openGame = document.querySelectorAll(".all-cards .game-cards .open");
+    const openGame = <HTMLElement>document.querySelector(".all-cards .game-cards .open");
 
     (<HTMLElement>document.querySelectorAll(".all-cards")[0]).style.width = window.innerWidth <= 1024 ? "100%" : "80%";
     (<HTMLElement>document.querySelectorAll(".game-cards")[0]).style.width = window.innerWidth <= 768 ? "100%" : "50%";
 
-    if (openGame.length) {
-      cards.open((<HTMLElement>openGame[0]).dataset.type);
+    if (openGame) {
+      cards.open(openGame.dataset.type);
     } else {
-      const openCard = document.querySelectorAll(".page.show .game-cards");
+      const openCard = document.querySelector(".page.show .game-cards");
 
-      if (openCard.length > 0) {
-        const firstGame = openCard[0].querySelectorAll("div")[0];
+      if (openCard) {
+        const firstGame = openCard.querySelectorAll("div")[0];
 
         firstGame.classList.add("open");
         cards.open(firstGame.dataset.type);
@@ -77,19 +77,19 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
 };
 
 const unloadPage: Function = (newScreenID: string) => {
-  const currentlyOpened = document.querySelectorAll(".page.show")[0];
+  const currentlyOpened = <HTMLElement>document.querySelector(".page.show");
   if (currentlyOpened !== undefined) currentlyOpened.classList.remove("show");
 
-  const currentlyClicked = document.querySelectorAll(".games-menu ul li.clicked")[0];
+  const currentlyClicked = <HTMLElement>document.querySelector(".games-menu ul li.clicked");
   if (currentlyClicked !== undefined) currentlyClicked.classList.remove("clicked");
 
-  const screen = document.querySelectorAll(`.page.${newScreenID}`)[0].classList;
+  const screen = (<HTMLElement>document.querySelector(`.page.${newScreenID}`)).classList;
   ["shrink", "show"].forEach(className => screen.add(className));
 
   document.querySelectorAll(".game-card")[0].classList.remove("open");
 
-  const currentlyFlagged = document.querySelectorAll(".game-card-regions.opened-flag");
-  if (currentlyFlagged.length) currentlyFlagged[0].classList.remove("opened-flag");
+  const currentlyFlagged = <HTMLElement>document.querySelector(".game-card-regions.opened-flag");
+  if (currentlyFlagged) currentlyFlagged.classList.remove("opened-flag");
 
   setTimeout(cards.openFirstCard, 600);
 
@@ -101,10 +101,10 @@ const unloadPage: Function = (newScreenID: string) => {
 const page = {
   cookie: Cookies.get("gm_blizz"),
   load: (id: string) => {
-    document.querySelectorAll(`.page.${id}`)[0].classList.toggle("shrink");
+    (<HTMLElement>document.querySelector(`.page.${id}`)).classList.toggle("shrink");
     setTimeout(() => {
-      document.querySelectorAll(`.page.${id} .content`)[0].classList.toggle("show");
-      document.querySelectorAll(`.games-menu ul li.${id}`)[0].classList.toggle("clicked");
+      (<HTMLElement>document.querySelector(`.page.${id} .content`)).classList.toggle("show");
+      (<HTMLElement>document.querySelector(`.games-menu ul li.${id}`)).classList.toggle("clicked");
     }, 300);
   },
   unload: (newScreenID: string) => {
