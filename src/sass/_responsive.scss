@@ -1,5 +1,5 @@
 @media only screen and (max-width: 375px) {
-  body .page .all-cards .game-card p {
+  body .page .all-cards .card-left p {
     font-size: 18px !important;
   }
 }
@@ -32,7 +32,7 @@
         margin: 0.7em;
       }
       .all-cards {
-        .game-card {
+        .card-left {
           margin-bottom: 0.5em;
           &:last-child {
             margin-bottom: 1em;
@@ -48,14 +48,14 @@
             @extend %padding;
           }
         }
-        .all-game-card-regions {
+        .cards-right-wrapper {
           padding-left: 15px;
           padding-right: 15px;
-          .game-card-regions {
+          .card-right {
             &.open {
               width: 100%;
             }
-            .region {
+            .card-right-content {
               .name {
                 padding-bottom: 10px;
                 width: 100%;

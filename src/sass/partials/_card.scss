@@ -5,9 +5,6 @@
   float: left;
   @include centerout("x");
   @include transition(all, 0.2s, ease-in-out);
-  /*.cards-right-wrapper {
-    @include transition(all, 0.2s, ease-in-out);
-  }*/
   .card-left {
     background-color: lighten($body-background-color, 15%);
     color: $main-font-white;
@@ -51,7 +48,7 @@
     &.open {
       width: 50%;
     }
-    .region {
+    .card-right-content {
       @include transition(all, 0.2s, ease-in-out);
       opacity: 0;
       &:hover {

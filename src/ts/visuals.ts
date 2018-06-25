@@ -30,14 +30,14 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
       gameCardRegionsSubclass.classList.add("opened-flag");
 
       setTimeout(() => {
-        toggleText(`.card-right.${card} .region`, "show");
+        toggleText(`.card-right.${card} .card-right-content`, "show");
       }, 400);
     }
   },
   close: (cb: Function) => {
     const recentlyClicked = (<HTMLElement>document.querySelector(".flag-recently-clicked")).classList;
     const openRegionInfo = (<HTMLElement>document.querySelector(".card-left.open")).dataset.type;
-    toggleText(`.card-right.${openRegionInfo} .region`, "hide");
+    toggleText(`.card-right.${openRegionInfo} .card-right-content`, "hide");
 
     setTimeout(() => {
       (<HTMLElement>document.querySelector(`.card-right.${openRegionInfo}`)).classList.remove("opened-flag");
@@ -84,7 +84,7 @@ const unloadPage: Function = (newScreenID: string) => {
   const currentlyOpened = <HTMLElement>document.querySelector(".page.show");
   if (currentlyOpened !== null) currentlyOpened.classList.remove("show");
 
-  const currentlyClicked = <HTMLElement>document.querySelector(".games-menu ul li.clicked");
+  const currentlyClicked = <HTMLElement>document.querySelector(".menu ul li.clicked");
   if (currentlyClicked !== null) currentlyClicked.classList.remove("clicked");
 
   const screen = (<HTMLElement>document.querySelector(`.page.${newScreenID}`)).classList;
@@ -108,7 +108,7 @@ const page = {
     (<HTMLElement>document.querySelector(`.page.${id}`)).classList.toggle("shrink");
     setTimeout(() => {
       (<HTMLElement>document.querySelector(`.page.${id} .content`)).classList.toggle("show");
-      (<HTMLElement>document.querySelector(`.games-menu ul li.${id}`)).classList.toggle("clicked");
+      (<HTMLElement>document.querySelector(`.menu ul li.${id}`)).classList.toggle("clicked");
     }, 300);
   },
   unload: (newScreenID: string) => {
@@ -127,7 +127,7 @@ const page = {
     if (section) idx = section;
 
     [`.page.${idx}`, `.page.${idx} .content`].forEach(selector => (<HTMLElement>document.querySelector(selector)).classList.toggle("show"));
-    (<HTMLElement>document.querySelector(`.games-menu ul li.${idx}`)).classList.toggle("clicked");
+    (<HTMLElement>document.querySelector(`.menu ul li.${idx}`)).classList.toggle("clicked");
     cards.openFirstCard();
   },
   flashImage: (id: string, cb: Function) => {
@@ -143,7 +143,7 @@ const page = {
 };
 
 const initializeSidebarHover = () => {
-  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".games-menu li img")).forEach(img => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".menu li img")).forEach(img => {
     img.addEventListener("mouseover", () => {
       tooltip.showTooltip(img);
     });
@@ -175,7 +175,7 @@ const initializeHamburger = () => {
 };
 
 const initializeSideBarListItems = () => {
-  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".games-menu li")).forEach(li => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".menu li")).forEach(li => {
     li.addEventListener("click", () => {
       if (!li.classList.contains("clicked") && document.querySelectorAll(".shrink").length <= 1) {
         const gameIndex = li.dataset.index!;
@@ -194,9 +194,9 @@ const initializeSideBarListItems = () => {
 };
 
 const initializeFirstPageLoad = () => {
-  let clicked = <HTMLElement>document.querySelector(".games-menu ul li.clicked");
+  let clicked = <HTMLElement>document.querySelector(".menu ul li.clicked");
 
-  Cookies.get("gm_blizz") ? page.loadWithoutAnimation() : (clicked = <HTMLElement>document.querySelectorAll(".games-menu ul li")[0]);
+  Cookies.get("gm_blizz") ? page.loadWithoutAnimation() : (clicked = <HTMLElement>document.querySelectorAll(".menu ul li")[0]);
 
   if (clicked !== null) {
     clicked.classList.add("clicked");
