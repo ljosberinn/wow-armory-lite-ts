@@ -8,15 +8,15 @@ const cookie = {
 };
 
 const tooltip = {
-  showTooltip: (element: Element) => {
-    element.insertAdjacentHTML("afterend", `<p class="customTooltip fadeIn200" style="width: ${element.dataset.tooltip.length * 6 + 100}px;">${element.dataset.tooltip}</p>`);
+  showTooltip: (element: HTMLElement) => {
+    element.insertAdjacentHTML("afterend", `<p class="customTooltip fadeIn200" style="width: ${element.dataset.tooltip!.length * 6 + 100}px;">${element.dataset.tooltip}</p>`);
   },
   hideTooltip: (targetEl: Element) => {
     targetEl.classList.add("fadeIn200");
     targetEl.classList.remove("fadeIn200");
 
     setTimeout(() => {
-      targetEl.nextElementSibling.remove();
+      targetEl.nextElementSibling!.remove();
     }, 200);
   }
 };
@@ -25,9 +25,9 @@ const toggleText = (target: string, state: string) => Array.from(document.queryS
 
 const cards: { open: Function; close: Function; openClose: Function; openFirstCard: Function } = {
   open: (card: string) => {
-    const gameCardRegionsSubclass = document.querySelectorAll(`.game-card-regions.${card}`);
-    if (gameCardRegionsSubclass.length > 0) {
-      gameCardRegionsSubclass[0].classList.add("opened-flag");
+    const gameCardRegionsSubclass = <HTMLElement>document.querySelector(`.game-card-regions.${card}`);
+    if (gameCardRegionsSubclass !== null) {
+      gameCardRegionsSubclass.classList.add("opened-flag");
 
       setTimeout(() => {
         toggleText(`.game-card-regions.${card} .region`, "show");
@@ -58,8 +58,7 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
   openFirstCard: () => {
     const openGame = <HTMLElement>document.querySelector(".all-cards .game-cards .open");
 
-    (<HTMLElement>document.querySelectorAll(".all-cards")[0]).style.width = window.innerWidth <= 1024 ? "100%" : "80%";
-    (<HTMLElement>document.querySelectorAll(".game-cards")[0]).style.width = window.innerWidth <= 768 ? "100%" : "50%";
+    adjustCardWidth();
 
     if (openGame) {
       cards.open(openGame.dataset.type);
@@ -76,12 +75,17 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
   }
 };
 
+const adjustCardWidth = () => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".all-cards")).forEach(card => (card.style.width = window.innerWidth <= 1024 ? "100%" : "80%"));
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".game-cards")).forEach(card => (card.style.width = window.innerWidth <= 768 ? "100%" : "50%"));
+};
+
 const unloadPage: Function = (newScreenID: string) => {
   const currentlyOpened = <HTMLElement>document.querySelector(".page.show");
-  if (currentlyOpened !== undefined) currentlyOpened.classList.remove("show");
+  if (currentlyOpened !== null) currentlyOpened.classList.remove("show");
 
   const currentlyClicked = <HTMLElement>document.querySelector(".games-menu ul li.clicked");
-  if (currentlyClicked !== undefined) currentlyClicked.classList.remove("clicked");
+  if (currentlyClicked !== null) currentlyClicked.classList.remove("clicked");
 
   const screen = (<HTMLElement>document.querySelector(`.page.${newScreenID}`)).classList;
   ["shrink", "show"].forEach(className => screen.add(className));
@@ -111,7 +115,7 @@ const page = {
     const currentPage = document.querySelectorAll(".page.show")[0];
     if (currentPage !== undefined) {
       currentPage.classList.add("shrink");
-      document.querySelectorAll(".page.show .content")[0].classList.toggle("show");
+      (<HTMLElement>document.querySelector(".page.show .content")).classList.toggle("show");
     }
 
     setTimeout(() => {
@@ -122,12 +126,12 @@ const page = {
     let idx = page.cookie;
     if (section) idx = section;
 
-    [`.page.${idx}`, `.page.${idx} .content`].forEach(selector => document.querySelectorAll(selector)[0].classList.toggle("show"));
-    document.querySelectorAll(`.games-menu ul li.${idx}`)[0].classList.toggle("clicked");
+    [`.page.${idx}`, `.page.${idx} .content`].forEach(selector => (<HTMLElement>document.querySelector(selector)).classList.toggle("show"));
+    (<HTMLElement>document.querySelector(`.games-menu ul li.${idx}`)).classList.toggle("clicked");
     cards.openFirstCard();
   },
   flashImage: (id: string, cb: Function) => {
-    const screenImage = document.querySelectorAll(`.page.${id} .fullscreen-img`)[0].classList;
+    const screenImage = (<HTMLElement>document.querySelector(`.page.${id} .fullscreen-img`)).classList;
     screenImage.add("fadeInOut400");
     setTimeout(() => {
       setTimeout(() => {
@@ -139,7 +143,7 @@ const page = {
 };
 
 const initializeSidebarHover = () => {
-  Array.from(document.querySelectorAll(".games-menu li img")).forEach(img => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".games-menu li img")).forEach(img => {
     img.addEventListener("mouseover", () => {
       tooltip.showTooltip(img);
     });
@@ -151,11 +155,11 @@ const initializeSidebarHover = () => {
 };
 
 const initializeHamburger = () => {
-  Array.from(document.querySelectorAll(".hamburger, .hamburger span")).forEach(hamburgerEl => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".hamburger, .hamburger span")).forEach(hamburgerEl => {
     hamburgerEl.addEventListener("click", () => {
-      const hamburger = Array.from(document.querySelectorAll(".hamburger"))[0];
+      const hamburger = <HTMLElement>document.querySelector(".hamburger");
       const toggleState = hamburger.dataset.toggle == "true";
-      const hamburgerMenu = document.querySelectorAll(".hamburger-menu")[0];
+      const hamburgerMenu = <HTMLElement>document.querySelector(".hamburger-menu");
 
       if (!toggleState) {
         hamburger.classList.add("open");
@@ -165,16 +169,16 @@ const initializeHamburger = () => {
         hamburgerMenu.classList.remove("opened-flag");
       }
 
-      hamburger.dataset.toggle = !toggleState;
+      hamburger.dataset.toggle = (!toggleState).toString();
     });
   });
 };
 
 const initializeSideBarListItems = () => {
-  Array.from(document.querySelectorAll(".games-menu li")).forEach(li => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".games-menu li")).forEach(li => {
     li.addEventListener("click", () => {
       if (!li.classList.contains("clicked") && document.querySelectorAll(".shrink").length <= 1) {
-        const gameIndex: string = li.dataset.index;
+        const gameIndex = li.dataset.index!;
         cookie.set("gm_blizz", gameIndex);
 
         page.unload(
@@ -190,21 +194,21 @@ const initializeSideBarListItems = () => {
 };
 
 const initializeFirstPageLoad = () => {
-  let clicked = document.querySelectorAll(".games-menu ul li.clicked")[0];
+  let clicked = <HTMLElement>document.querySelector(".games-menu ul li.clicked");
 
-  Cookies.get("gm_blizz") ? page.loadWithoutAnimation() : (clicked = document.querySelectorAll(".games-menu ul li")[0]);
+  Cookies.get("gm_blizz") ? page.loadWithoutAnimation() : (clicked = <HTMLElement>document.querySelectorAll(".games-menu ul li")[0]);
 
-  if (clicked !== undefined) {
+  if (clicked !== null) {
     clicked.classList.add("clicked");
-    cookie.set("gm_blizz", clicked.dataset.index);
+    cookie.set("gm_blizz", clicked.dataset.index!);
     page.loadWithoutAnimation(clicked.dataset.index);
   }
 };
 
 const initializeCardOnClick = () => {
-  Array.from(document.querySelectorAll(".game-card")).forEach(card => {
+  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".game-card")).forEach(card => {
     card.addEventListener("click", e => {
-      if (e.target.localName === "i") return;
+      if (e.target!.localName === "i") return;
 
       if (Array.from(document.querySelectorAll(".flag-recently-clicked")).length > 0) return;
 
@@ -216,7 +220,7 @@ const initializeCardOnClick = () => {
 
 export const initialize = () => {
   document.addEventListener("DOMContentLoaded", () => {
-    Array.from(document.querySelectorAll(".game-card-regions")).forEach(el => el.classList.add("open"));
+    Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll(".game-card-regions")).forEach(el => el.classList.add("open"));
 
     initializeHamburger();
     initializeSideBarListItems();
@@ -224,9 +228,9 @@ export const initialize = () => {
     initializeSidebarHover();
     initializeCardOnClick();
 
-    const gameEnabled = document.querySelectorAll(".game-enabled");
-    if (gameEnabled.length) {
-      cards.open(gameEnabled[0].dataset.type);
+    const gameEnabled = <HTMLElement>document.querySelector(".game-enabled");
+    if (gameEnabled) {
+      cards.open(gameEnabled.dataset.type);
     }
   });
 };
