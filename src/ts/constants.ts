@@ -63,15 +63,15 @@ export const MYTHIC_PLUS_ACHIEVEMENTS: number[] = [11183, 11184, 11185, 11162];
 
 const LEGION_AOTC_ACHIEVEMENTS: number[] = [11194, 11581, 11195, 11874, 12110];
 const LEGION_CE_ACHIEVEMENTS: number[] = [11191, 11580, 11192, 11875, 12111];
+export const LEGION_RAID_IDS: number[] = [10, 11, 12, 13, 17];
 export const LEGION_RAID_NAMES: string[] = ["Emerald Nightmare", "Trial of Valor", "The Nighthold", "Tomb of Sargeras", "Antorus, the Burning Throne"];
-
 export const LEGION_RAID_ACHIEVEMENTS: number[][] = [LEGION_AOTC_ACHIEVEMENTS, LEGION_CE_ACHIEVEMENTS];
 
 // add achievement IDs and names for later raids here
 const BFA_AOTC_ACHIEVEMENTS: number[] = [125360];
 const BFA_CE_ACHIEVEMENTS: number[] = [12535];
 export const BFA_RAID_NAMES: string[] = ["Uldir"];
-
+export const BFA_RAID_IDS: number[] = [19];
 export const BFA_RAID_ACHIEVEMENTS: number[][] = [BFA_AOTC_ACHIEVEMENTS, BFA_CE_ACHIEVEMENTS];
 
 export const LEGION_FACTIONS: IConstFactionObj[] = [

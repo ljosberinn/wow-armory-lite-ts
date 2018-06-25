@@ -127,7 +127,7 @@ const page = {
     cards.openFirstCard();
   },
   flashImage: (id: string, cb: Function) => {
-    const screenImage = document.querySelectorAll(`.page.${id} .fullscreenimg`)[0].classList;
+    const screenImage = document.querySelectorAll(`.page.${id} .fullscreen-img`)[0].classList;
     screenImage.add("fadeInOut400");
     setTimeout(() => {
       setTimeout(() => {

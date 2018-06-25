@@ -258,3 +258,93 @@ interface IBlizzardStatisticsSubcategorySubcategoryStatistics {
   money: boolean;
   highest: string;
 }
+
+interface IWarcraftlogsAPIObject {
+  difficulty: number;
+  kill: number;
+  name: string;
+  partition: 0;
+  size: number;
+  specs: IWarcraftlogsAPISpecs[];
+  variable: boolean;
+}
+
+interface IWarcraftlogsAPIGear {
+  id: number;
+  name: string;
+  quality: string;
+}
+
+interface IWarcraftlogsAPITalent {
+  name: string;
+  id: number;
+}
+
+interface IWarcraftlogsAPIData {
+  affixes: null;
+  banned: boolean;
+  character_id: number;
+  character_name: string;
+  duration: number;
+  exploit: number;
+  gear: IWarcraftlogsAPIGear[];
+  guild: string;
+  historical_count: number;
+  historical_locked: boolean;
+  historical_percent: number;
+  ilvl: number;
+  keystone_adjust: number;
+  percent: number;
+  persecondamount: number;
+  rank: string;
+  ranking_id: number;
+  report_code: string;
+  report_fight: number;
+  start_time: number;
+  talents: IWarcraftlogsAPITalent[];
+  total: number;
+}
+
+interface IWarcraftlogsAPISpecs {
+  best_allstar_points: number;
+  best_combined_allstar_points: number;
+  best_duration: number;
+  best_gear: IWarcraftlogsAPIGear[];
+  best_historical_locked: boolean;
+  best_historical_percent: number;
+  best_persecondamount: number;
+  best_talents: IWarcraftlogsAPITalent[];
+  class: string;
+  combined: boolean;
+  data: IWarcraftlogsAPIData[];
+  historical_avg: number;
+  historical_locked: boolean;
+  historical_median: number;
+  historical_total: number;
+  possible_allstar_points: number;
+  spec: string;
+}
+interface ICustomWarcraftlogsObject {
+  lfr: IWarcraftlogsAPIObject[];
+  normal: IWarcraftlogsAPIObject[];
+  heroic: IWarcraftlogsAPIObject[];
+  mythic: IWarcraftlogsAPIObject[];
+}
+
+interface IWarcraftlogsAPICleanObject {
+  kill: number;
+  name: string;
+  size: number;
+  specs: IWarcraftlogsAPICleanSpec[];
+}
+
+interface IWarcraftlogsAPICleanSpec {
+  best_allstar_points: number;
+  best_duration: number;
+  best_historical_percent: number;
+  best_talents: IWarcraftlogsAPITalent[];
+  killCount: number;
+  historical_avg: number;
+  historical_median: number;
+  spec: string;
+}

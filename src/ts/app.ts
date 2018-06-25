@@ -7,8 +7,10 @@ import {
   MYTHIC_PLUS_ACHIEVEMENTS,
   LEGION_RAID_ACHIEVEMENTS,
   LEGION_RAID_NAMES,
+  LEGION_RAID_IDS,
   BFA_RAID_ACHIEVEMENTS,
   BFA_RAID_NAMES,
+  BFA_RAID_IDS,
   LEGION_FACTIONS,
   BFA_FACTIONS,
   REGIONS
@@ -19,7 +21,16 @@ import { initialize } from "./visuals";
 const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
     `https://${region}.api.battle.net/wow/character/${realm}/${character}?fields=items,statistics,achievements,talents&locale=en_GB&apikey=${API.Blizzard}`,
-  Warcraftlogs: (character: string, region: string, realm: string): string => `https://www.warcraftlogs.com:443/v1/parses/character/${character}/${realm}/${region}?api_key=${API.Warcraftlogs}`,
+  Warcraftlogs: (character: string, region: string, realm: string): string[] => {
+    let zoneURLs: string[];
+    zoneURLs = [];
+
+    LEGION_RAID_IDS.forEach(id => {
+      zoneURLs.push(`https://www.warcraftlogs.com:443/v1/parses/character/${character}/${realm}/${region}?zone=${id}&api_key=${API.Warcraftlogs}`);
+    });
+
+    return zoneURLs;
+  },
   RaiderIO: (character: string, region: string, realm: string): string => `http://raider.io/api/v1/characters/profile?region=${region}&realm=${realm}&name=${character}&fields=mythic_plus_scores`
 };
 
@@ -229,18 +240,62 @@ const validateRegion = (region: string) => REGIONS.includes(region);
 
 const returnBlizzardAvatar = (BlizzardAPIData: IBlizzardAPIObject, region: string) => `https://render-${region}.worldofwarcraft.com/character/${BlizzardAPIData.thumbnail}`;
 
+const splitWarcraftlogsByDifficulty = (response: IWarcraftlogsAPIObject[]): ICustomWarcraftlogsObject => {
+  const responseJSON = {
+    lfr: [],
+    normal: [],
+    heroic: [],
+    mythic: []
+  };
+
+  response.forEach(logData => {
+    const diff = logData.difficulty;
+    const cleanedUpLog = cleanUpLogData(logData);
+
+    diff === 5
+      ? responseJSON.mythic.push(cleanedUpLog)
+      : diff === 4 ? responseJSON.heroic.push(cleanedUpLog) : diff === 3 ? responseJSON.normal.push(cleanedUpLog) : diff === 1 ? responseJSON.lfr.push(cleanedUpLog) : void 0;
+  });
+
+  return responseJSON;
+};
+
+const cleanUpLogDataSpec = (specs: IWarcraftlogsAPISpecs[]) => {
+  let arr: IWarcraftlogsAPICleanSpec[];
+  arr = [];
+
+  specs.forEach(originalLogSpec => {
+    arr.push({
+      best_allstar_points: originalLogSpec.best_allstar_points,
+      best_duration: originalLogSpec.best_duration,
+      best_historical_percent: originalLogSpec.best_historical_percent,
+      best_talents: originalLogSpec.best_talents,
+      killCount: originalLogSpec.historical_total,
+      historical_avg: originalLogSpec.historical_avg,
+      historical_median: originalLogSpec.historical_median,
+      spec: originalLogSpec.spec
+    });
+  });
+
+  return arr;
+};
+const cleanUpLogData = (logData: IWarcraftlogsAPIObject): IWarcraftlogsAPICleanObject => {
+  return {
+    kill: logData.kill,
+    name: logData.name,
+    size: logData.size,
+    specs: cleanUpLogDataSpec(logData.specs)
+  };
+};
+
 initialize();
 
 (async () => {
-  const container = await getURLData(returnURL.Blizzard("Xepheris", "EU", "Blackmoore"));
+  const URLS = returnURL.Warcraftlogs("Shakib", "US", "Turalyon");
 
-  console.log(getEquippedItems(container.items));
-  console.log(getClassInformation(container.class));
-  console.log(getReputationProgress(container.achievements));
-  console.log(getSelectedTalents(container.talents));
-  console.log(getHighestMythicPlusAchievement(container.achievements));
-  console.log(getPvERaidAchievements(container.achievements));
-  console.log(getRaceInformation(container.race));
-  console.log(returnBlizzardAvatar(container, "EU"));
-  console.log(validateRegion("EU"));
+  URLS.forEach(async url => {
+    const data = await getURLData(url);
+
+    console.log(splitWarcraftlogsByDifficulty(data));
+  });
 })();
