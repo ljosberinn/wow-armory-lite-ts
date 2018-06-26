@@ -1,3 +1,4 @@
+import Raven from 'raven-js';
 import {
   RACES,
   CLASSES,
@@ -16,6 +17,8 @@ import {
 } from './constants';
 import { API } from './secrets';
 import { initialize } from './visuals';
+
+Raven.config('https://ca22106a81d147b586d31169dddfbfe4@sentry.io/1232788').install();
 
 const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
@@ -272,6 +275,12 @@ const cleanUpLogData = (logData: IWarcraftlogsAPIObject): IWarcraftlogsAPICleanO
   specs: cleanUpLogDataSpec(logData.specs),
 });
 
+/*
+Raven.context(() => {
+  initialize();
+});
+*/
+
 initialize();
 
 (async () => {
@@ -285,5 +294,7 @@ initialize();
   });
 
   */
-  console.log(await getURLData(returnURL.RaiderIO('Shakib', 'US', 'Turalyon')));
+  const raiderIOURL = returnURL.RaiderIO('Shakib', 'US', 'Turalyon');
+  console.log(raiderIOURL);
+  //console.log(await getURLData(raiderIOURL));
 })();

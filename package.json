@@ -10,14 +10,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "raven-js": "^3.26.3",
+    "node-sass": "^4.9.0",
+    "parcel-bundler": "^1.9.1"
+  },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-typescript": "^0.12.0",
-    "node-sass": "^4.9.0",
-    "parcel-bundler": "^1.9.1",
     "stylelint": "^9.3.0",
     "stylelint-config-recommended": "^2.1.0",
     "typescript": "^2.9.2",
