@@ -275,13 +275,10 @@ const cleanUpLogData = (logData: IWarcraftlogsAPIObject): IWarcraftlogsAPICleanO
   specs: cleanUpLogDataSpec(logData.specs),
 });
 
-/*
+
 Raven.context(() => {
   initialize();
 });
-*/
-
-initialize();
 
 (async () => {
   /* WARCRAFTLOGS ACCESS

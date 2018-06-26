@@ -2,7 +2,10 @@ node_modules
 package-lock.json
 src/ts/secrets.ts
 
+classConversionAnnotations.txt
+logo.psd
+
 // parcelJS
 dist/*
 .cache
-classConversionAnnotations.txt
+
