@@ -74,7 +74,7 @@ export const BFA_RAID_NAMES: string[] = ['Uldir'];
 const BFA_RAID_IDS: number[] = [19];
 export const BFA_RAID_ACHIEVEMENTS: number[][] = [BFA_AOTC_ACHIEVEMENTS, BFA_CE_ACHIEVEMENTS];
 
-export const RAID_IDS: number[] = LEGION_RAID_IDS.concat(BFA_RAID_IDS);
+export const RAID_IDS: number[] = LEGION_RAID_IDS; /* .concat(BFA_RAID_IDS); // enable with BFA Raid release */
 
 export const LEGION_FACTIONS: IConstFactionObj[] = [
   { name: 'Highmountain Tribe', id: 30497 },

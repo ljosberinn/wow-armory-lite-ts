@@ -196,7 +196,7 @@ const initializeCardOnClick = () => {
   });
 };
 
-export const initialize = () => {
+export const initVisuals = () => {
   document.addEventListener('DOMContentLoaded', () => {
     Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.card-right')).forEach(el => el.classList.add('open'));
 
