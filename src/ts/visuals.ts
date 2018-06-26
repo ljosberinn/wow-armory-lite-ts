@@ -1,12 +1,3 @@
-const cookie = {
-  set: (name: string, value: string) => {
-    Cookies.set(name, value);
-  },
-  delete: (name: string) => {
-    Cookies.remove(name, null);
-  },
-};
-
 const tooltip = {
   showTooltip: (element: HTMLElement) => {
     element.insertAdjacentHTML('afterend', `<p class="customTooltip fadeIn200" style="width: ${element.dataset.tooltip!.length * 6 + 100}px;">${element.dataset.tooltip}</p>`);
@@ -103,7 +94,6 @@ const unloadPage: Function = (newScreenID: string) => {
 };
 
 const page = {
-  cookie: Cookies.get('gm_blizz'),
   load: (id: string) => {
     (<HTMLElement>document.querySelector(`.page.${id}`)).classList.toggle('shrink');
     setTimeout(() => {
@@ -122,12 +112,9 @@ const page = {
       unloadPage(newScreenID);
     }, 300);
   },
-  loadWithoutAnimation: (section?: string) => {
-    let idx = page.cookie;
-    if (section) idx = section;
-
-    [`.page.${idx}`, `.page.${idx} .content`].forEach(selector => (<HTMLElement>document.querySelector(selector)).classList.toggle('show'));
-    (<HTMLElement>document.querySelector(`.menu ul li.${idx}`)).classList.toggle('clicked');
+  loadWithoutAnimation: (section: string) => {
+    [`.page.${section}`, `.page.${section} .content`].forEach(selector => (<HTMLElement>document.querySelector(selector)).classList.toggle('show'));
+    (<HTMLElement>document.querySelector(`.menu ul li.${section}`)).classList.toggle('clicked');
     cards.openFirstCard();
   },
   flashImage: (id: string, cb: Function) => {
@@ -177,12 +164,9 @@ const initializeHamburger = () => {
 const initializeSideBarListItems = () => {
   Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.menu li')).forEach(li => {
     li.addEventListener('click', () => {
-      if (!li.classList.contains('clicked') && document.querySelectorAll('.shrink').length <= 1) {
-        const gameIndex = li.dataset.index!;
-        cookie.set('gm_blizz', gameIndex);
-
+      if (!li.classList.contains('clicked') && document.querySelectorAll('.shrink').length <= 2) {
         page.unload(
-          gameIndex,
+          li.dataset.index!,
           () => {
             page.load();
           },
@@ -194,15 +178,9 @@ const initializeSideBarListItems = () => {
 };
 
 const initializeFirstPageLoad = () => {
-  let clicked = <HTMLElement>document.querySelector('.menu ul li.clicked');
-
-  Cookies.get('gm_blizz') ? page.loadWithoutAnimation() : (clicked = <HTMLElement>document.querySelectorAll('.menu ul li')[0]);
-
-  if (clicked !== null) {
-    clicked.classList.add('clicked');
-    cookie.set('gm_blizz', clicked.dataset.index!);
-    page.loadWithoutAnimation(clicked.dataset.index);
-  }
+  const clicked = <HTMLElement>document.querySelector('.menu ul li');
+  clicked.classList.add('clicked');
+  page.loadWithoutAnimation(clicked.dataset.index!);
 };
 
 const initializeCardOnClick = () => {

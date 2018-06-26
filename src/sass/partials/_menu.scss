@@ -19,6 +19,7 @@
                 float: none;
                 display: block;
                 opacity: .5;
+                border-radius: 5px;
                 @include transition(all, .2s, ease-in-out);
                 &:hover {
                     cursor: pointer;

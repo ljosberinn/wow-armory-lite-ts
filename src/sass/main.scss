@@ -23,6 +23,14 @@
 
 @import "pages/global";
 
+a {
+  color: #ff628c;
+}
+
+a:visited {
+  color: #3ad900;
+}
+
 .clicked {
   pointer-events: none;
 }
