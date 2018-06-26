@@ -1,4 +1,4 @@
-import { returnURL, getURLData, prettyPrintSeconds, validateRegion } from './helperFunctions';
+import { returnURL, getURLData, prettyPrintSeconds, validateRegion, switchTabToCharacter, normalize } from './helperFunctions';
 import {
   RACES,
   CLASSES,
@@ -15,28 +15,61 @@ import {
 } from './constants';
 
 export class BlizzardAPI {
-  private data: any;
+
+
+  private data!: IBlizzardAPIObject;
   private character: string;
   private region: string;
   private realm: string;
 
+  private classInformation!: IClassInformationDetailObj;
+  private raceInformation!: {name: string, icon:string};
+  private selectedRole!: {specName: string, icon: string, role: string};
+
+
+
+
   constructor(character: string, region: string, realm: string) {
-    this.character = character;
+    this.character = normalize.lowerCaseCapitalization(character);
 
     if (validateRegion(region)) {
-      this.region = region;
+      this.region = normalize.upperCase(region);
     } else {
       this.region = '';
     }
 
-    this.realm = realm;
+    this.realm = normalize.lowerCaseCapitalization(realm);
 
-    (async () => {
-      this.data = await getURLData(returnURL.Blizzard(character, region, realm));
-
-      console.log(this.data);
-    })();
+    this.getData();
   }
+
+  getData = () => (async () => {
+    this.data = <IBlizzardAPIObject>await getURLData(returnURL.Blizzard(this.character, this.region, this.realm));
+    this.executeBlizzardAPI();
+  })();
+
+
+
+
+  executeBlizzardAPI = () => {
+    this.classInformation = this.getClassInformation(this.data.class);
+    this.raceInformation = this.getRaceInformation(this.data.race);
+    this.selectedRole = this.getSelectedTalents(this.data.talents);
+
+    this.setSplash(this.returnCharacterSplash(this.region));
+    this.setCharacterPath();
+    this.setRaceClass();
+  }
+
+  setSplash = (url: string) => {
+    const imgEl = <HTMLImageElement>document.getElementById('character-splash');
+    imgEl.src = url;
+    imgEl.onload = () => switchTabToCharacter();
+};
+
+  setCharacterPath = () => (<HTMLParagraphElement>document.getElementById('character-path')).innerText = `${this.character} @ ${this.region}–${this.realm}`;
+
+  setRaceClass = () => (<HTMLParagraphElement>document.getElementById('race-class')).innerText = `${this.raceInformation.name} ${this.selectedRole.specName} ${this.classInformation.name}`;
 
   getRaceInformation = (raceIndex: number) => {
     const raceData: string = RACES[raceIndex];
@@ -185,5 +218,8 @@ export class BlizzardAPI {
     };
   };
 
-  returnBlizzardAvatar = (BlizzardAPIData: IBlizzardAPIObject, region: string) => `https://render-${region}.worldofwarcraft.com/character/${BlizzardAPIData.thumbnail}`;
+  returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
+  returnCharacterSplash = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail.replace('avatar', 'main')}`;
+
+
 }

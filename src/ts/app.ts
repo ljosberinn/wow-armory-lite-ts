@@ -31,5 +31,5 @@ Raven.context(() => {
   /* Blizzard API Access */
   console.log(await new BlizzardAPI(cObj.character, cObj.region, cObj.realm));
   /* Warcraftlogs API Access */
-  console.log(await new WarcraftlogsAPI(cObj.character, cObj.region, cObj.realm));
+  //console.log(await new WarcraftlogsAPI(cObj.character, cObj.region, cObj.realm));
 })();

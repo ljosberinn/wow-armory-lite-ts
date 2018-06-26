@@ -8,6 +8,7 @@ export class WarcraftlogsAPI {
   private realm: string;
 
   constructor(character: string, region: string, realm: string) {
+    this.data = [];
     this.character = character;
 
     if (validateRegion(region)) {

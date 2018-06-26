@@ -1,5 +1,6 @@
 import { API } from './secrets';
 import { RAID_IDS, REGIONS } from './constants';
+import * as REALMS from './realms.json';
 
 export const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
@@ -62,3 +63,18 @@ export const prettyPrintSeconds = (s: number) => {
 };
 
 export const validateRegion = (region: string) => REGIONS.includes(region);
+
+const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+
+export const validateRealm = (region: string, realm: string) => {
+  const [sanitizedRealm, realmContainer] = [realm.toLowerCase().replace(/[áéíóú\- ']/g, ''), (<any>REALMS)[region]];
+
+  return Object.values(realmContainer).some(realmObj => realmObj.sanitized === sanitizedRealm);
+};
+
+export const normalize = {
+  lowerCaseCapitalization: (word: string) => capitalize(word.toLowerCase()),
+  upperCase: (word: string) => word.toUpperCase(),
+};
+
+export const switchTabToCharacter = () => (<HTMLUListElement>document.querySelector('[data-index="card_1"]')).click();
