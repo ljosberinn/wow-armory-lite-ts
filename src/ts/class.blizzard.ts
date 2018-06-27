@@ -1,60 +1,36 @@
-import { returnURL, getURLData, prettyPrintSeconds, validateRegion, switchTabToCharacter, normalize } from './helperFunctions';
-import {
-  RACES,
-  CLASSES,
-  ENCHANTABLES,
-  QUALITY_CLASSES,
-  MYTHIC_PLUS_ACHIEVEMENTS,
-  MYTHIC_PLUS_ACHIEVEMENT_LEVELS,
-  BFA_RAID_ACHIEVEMENTS,
-  LEGION_RAID_ACHIEVEMENTS,
-  LEGION_RAID_NAMES,
-  BFA_RAID_NAMES,
-  LEGION_FACTIONS,
-  BFA_FACTIONS,
-} from './constants';
+import { AZERITE_SLOTS, BFA_FACTIONS, BFA_RAID_ACHIEVEMENTS, BFA_RAID_NAMES, CLASSES, ENCHANTABLES, ITEM_SLOTS, LEGION_FACTIONS, LEGION_RAID_ACHIEVEMENTS, LEGION_RAID_NAMES, MYTHIC_PLUS_ACHIEVEMENTS, MYTHIC_PLUS_ACHIEVEMENT_LEVELS, QUALITY_CLASSES, RACES, WEAPON_SLOTS } from './constants';
+import { getURLData, normalize, prettyPrintSeconds, returnURL, switchTabToCharacter, validateRegion } from './helperFunctions';
 
 export class BlizzardAPI {
-
-
-  private data!: IBlizzardAPIObject;
+  private data: IBlizzardAPIObject;
   private character: string;
   private region: string;
   private realm: string;
 
-  private classInformation!: IClassInformationDetailObj;
-  private raceInformation!: {name: string, icon:string};
-  private selectedRole!: {specName: string, icon: string, role: string};
-
-
-
+  private classInformation: IClassInformationDetailObj;
+  private raceInformation: { name: string; icon: string };
+  private selectedRole: { specName: string; icon: string; role: string };
+  private items: ICustomItemObj;
 
   constructor(character: string, region: string, realm: string) {
     this.character = normalize.lowerCaseCapitalization(character);
-
-    if (validateRegion(region)) {
-      this.region = normalize.upperCase(region);
-    } else {
-      this.region = '';
-    }
-
+    this.region = validateRegion(region) ? normalize.upperCase(region) : '';
     this.realm = normalize.lowerCaseCapitalization(realm);
 
     this.getData();
   }
 
-  getData = () => (async () => {
-    this.data = <IBlizzardAPIObject>await getURLData(returnURL.Blizzard(this.character, this.region, this.realm));
-    this.executeBlizzardAPI();
-  })();
-
-
-
+  getData = () =>
+    (async () => {
+      this.data = <IBlizzardAPIObject> await getURLData(returnURL.Blizzard(this.character, this.region, this.realm));
+      this.executeBlizzardAPI();
+    })();
 
   executeBlizzardAPI = () => {
     this.classInformation = this.getClassInformation(this.data.class);
     this.raceInformation = this.getRaceInformation(this.data.race);
     this.selectedRole = this.getSelectedTalents(this.data.talents);
+    this.items = this.getEquippedItems(this.data.items);
 
     const avatarLink = this.returnCharacterAvatar(this.region);
 
@@ -63,7 +39,8 @@ export class BlizzardAPI {
     this.setSpecLogo();
     this.setCharacterPath();
     this.setRaceClass();
-  }
+    this.setItems();
+  };
 
   returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
 
@@ -77,9 +54,9 @@ export class BlizzardAPI {
 
   setSpecLogo = () => ((<HTMLImageElement>document.getElementById('spec-logo')).src = this.selectedRole.icon);
 
-  setCharacterPath = () => (<HTMLParagraphElement>document.getElementById('character-path')).innerText = `${this.character} @ ${this.region}–${this.realm}`;
+  setCharacterPath = () => ((<HTMLParagraphElement>document.getElementById('character-path')).innerText = `${this.character} @ ${this.region}–${this.realm}`);
 
-  setRaceClass = () => (<HTMLParagraphElement>document.getElementById('race-class')).innerText = `${this.raceInformation.name} ${this.selectedRole.specName} ${this.classInformation.name}`;
+  setRaceClass = () => ((<HTMLParagraphElement>document.getElementById('race-class')).innerText = `${this.raceInformation.name} ${this.selectedRole.specName} ${this.classInformation.name}`);
 
   getRaceInformation = (raceIndex: number) => {
     const raceData: string = RACES[raceIndex];
@@ -115,8 +92,6 @@ export class BlizzardAPI {
     return result;
   };
 
-  convertQualityToClass = (quality: number): string => `quality-${QUALITY_CLASSES[quality]}`;
-
   getEquippedItems = (items: IBlizzardItemsContainer) => {
     const result: ICustomItemObj = {
       averageItemLevel: 0,
@@ -132,7 +107,7 @@ export class BlizzardAPI {
         result[resultProperty] = currentValue;
       } else {
         const tempObj: ICustomItemInfoObj = {
-          itemID: currentValue.itemLevel,
+          itemID: currentValue.id,
           itemLevel: currentValue.itemLevel,
           itemName: currentValue.name,
           bonusLists: currentValue.bonusLists,
@@ -156,6 +131,53 @@ export class BlizzardAPI {
 
     return result;
   };
+
+  setItems = () => {
+    const regularSlots = ITEM_SLOTS.filter(slot => AZERITE_SLOTS.concat(WEAPON_SLOTS).indexOf(slot) === -1);
+
+    const azeriteContainer = <HTMLDivElement>document.getElementById('ci-azerite-slots');
+    const weaponContainer = <HTMLDivElement>document.getElementById('ci-weapon-slots');
+    const regularContainer = <HTMLDivElement>document.getElementById('ci-item-slots');
+
+    Object.entries(this.items).forEach(subArr => {
+      if (subArr[0] === 'averageItemLevel') (<HTMLSpanElement>document.getElementById('ci-ilvl-total')).innerText = subArr[1];
+
+      if (subArr[0] === 'averageItemLevelEquipped') (<HTMLSpanElement>document.getElementById('ci-ilvl-equipped')).innerText = subArr[1];
+
+      if (AZERITE_SLOTS.indexOf(subArr[0]) !== -1) azeriteContainer.insertAdjacentHTML('beforeend', this.returnItemTemplate(subArr[1]));
+
+      if (WEAPON_SLOTS.indexOf(subArr[0]) !== -1) weaponContainer.insertAdjacentHTML('beforeend', this.returnItemTemplate(subArr[1]));
+
+      if (regularSlots.indexOf(subArr[0]) !== -1) regularContainer.insertAdjacentHTML('beforeend', this.returnItemTemplate(subArr[1]));
+    });
+
+    // switch to full-width for single-wielding characters
+    if (typeof this.items.offHand === "undefined") weaponContainer.classList.replace('ci-items-50', 'ci-items-100');
+  };
+
+  returnItemTemplate = (item: ICustomItemInfoObj) => {
+    let link = `${item.itemID}`;
+
+    // append boni to link
+    if (item.bonusLists.length > 0) {
+      link += '?bonus=';
+      item.bonusLists.forEach(bonus => (link += `${bonus}:`));
+      link = link.slice(0, -1);
+    }
+
+    // append enchant
+    if (item.enchant) link += `&ench=${item.enchant}`;
+
+    // append gem
+    if (item.gemID) link += `&gems=${item.gemID}`;
+
+    // if enchanted but no boni, fix link
+    if (item.bonusLists.length === 0) link = link.replace('&', '?');
+
+    return `<div><a href="https://www.wowhead.com/item=${link}" target="_blank" class="${this.convertQualityToClass(item.quality!)}">${item.itemLevel}</a></div>`;
+  };
+
+  convertQualityToClass = (quality: number): string => `quality-${QUALITY_CLASSES[quality]}`;
 
   getHighestMythicPlusAchievement = (achievementContainer: IBlizzardAchievementsContainer): ICustomMythicPlusAchievementObj => {
     let highestMythicPlusAchievement;
@@ -228,8 +250,5 @@ export class BlizzardAPI {
     };
   };
 
-
-  //returnCharacterSplash = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail.replace('avatar', 'main')}`;
-
-
+  // returnCharacterSplash = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail.replace('avatar', 'main')}`;
 }

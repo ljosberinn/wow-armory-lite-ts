@@ -1,5 +1,5 @@
-import { validateRegion, returnURL, getURLData } from './helperFunctions';
-import { LEGION_RAID_NAMES, BFA_RAID_NAMES } from './constants';
+import { BFA_RAID_NAMES, LEGION_RAID_NAMES } from './constants';
+import { getURLData, returnURL, validateRegion } from './helperFunctions';
 
 export class WarcraftlogsAPI {
   private data: any[];

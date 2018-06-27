@@ -78,7 +78,41 @@
   #spec-logo {
     display: none;
   }
-  #character-path, #race-class {
+  #character-path,
+  #race-class {
     text-align: right;
   }
+}
+
+.ci-items-50,
+.ci-items-33,
+.ci-items-100 {
+  display: grid;
+  grid-gap: 0.3em;
+  text-align: center;
+}
+
+.ci-items-50 {
+  grid-template-columns: 50% 50%;
+}
+
+.ci-items-33 {
+  grid-template-columns: 33.3% 33.3% 33.3%;
+}
+
+.ci-items-25 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.3em 0;
+}
+
+.ci-items-100 {
+  grid-template-columns: 100%;
+}
+
+.ci-items-25 div {
+  flex: 0 0 calc(25% - 0.15em);
+  padding: 0.3em 0;
+  text-align: center;
 }

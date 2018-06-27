@@ -1,6 +1,6 @@
-import { API } from './secrets';
 import { RAID_IDS, REGIONS } from './constants';
 import * as REALMS from './realms.json';
+import { API } from './secrets';
 
 export const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>

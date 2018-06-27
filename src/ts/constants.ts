@@ -57,6 +57,9 @@ export const CLASSES: IClassInformationObj = {
 
 export const ENCHANTABLES: string[] = ['hands', 'finger1', 'finger2', 'mainHand', 'offHand'];
 export const QUALITY_CLASSES: string[] = ['poor', 'common', 'uncommon', 'rare', 'epic', 'legendary', 'artifact', 'heirloom'];
+export const ITEM_SLOTS: string[] = ['head', 'neck', 'shoulder', 'back', 'chest', /*'shirt', */ 'wrist', 'hands', 'waist', 'legs', 'feet', 'finger1', 'finger2', 'trinket1', 'trinket2', 'mainHand', 'offHand'];
+export const AZERITE_SLOTS = ['head', 'shoulder', 'chest'];
+export const WEAPON_SLOTS = ['mainHand', 'offHand'];
 
 export const MYTHIC_PLUS_ACHIEVEMENT_LEVELS: number[] = [2, 5, 10, 15];
 export const MYTHIC_PLUS_ACHIEVEMENTS: number[] = [11183, 11184, 11185, 11162];
