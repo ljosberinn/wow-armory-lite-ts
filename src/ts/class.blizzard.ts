@@ -56,7 +56,7 @@ export class BlizzardAPI {
     this.raceInformation = this.getRaceInformation(this.data.race);
     this.selectedRole = this.getSelectedTalents(this.data.talents);
 
-    this.setSplash(this.returnCharacterSplash(this.region));
+    this.setSplash(this.returnCharacterAvatar(this.region).replace('avatar', 'main'));
     this.setCharacterPath();
     this.setRaceClass();
   }
@@ -65,7 +65,9 @@ export class BlizzardAPI {
     const imgEl = <HTMLImageElement>document.getElementById('character-splash');
     imgEl.src = url;
     imgEl.onload = () => switchTabToCharacter();
-};
+  };
+
+  returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
 
   setCharacterPath = () => (<HTMLParagraphElement>document.getElementById('character-path')).innerText = `${this.character} @ ${this.region}–${this.realm}`;
 
@@ -218,8 +220,8 @@ export class BlizzardAPI {
     };
   };
 
-  returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
-  returnCharacterSplash = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail.replace('avatar', 'main')}`;
+
+  //returnCharacterSplash = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail.replace('avatar', 'main')}`;
 
 
 }
