@@ -41,13 +41,13 @@
     color: $main-font-white;
     background-color: lighten($body-background-color, 20%);
     padding: 0;
-    width: 0;
+    //width: 0;
     &.opened-flag {
       max-height: 600px;
     }
-    &.open {
+    /*&.open {
       width: 50%;
-    }
+    }*/
     .card-right-content {
       @include transition(all, 0.2s, ease-in-out);
       opacity: 0;

@@ -49,26 +49,19 @@ const cards: { open: Function; close: Function; openClose: Function; openFirstCa
   openFirstCard: () => {
     const openGame = <HTMLElement>document.querySelector('.all-cards .cards-left-wrapper .open');
 
-    adjustCardWidth();
-
     if (openGame) {
       cards.open(openGame.dataset.type);
     } else {
-      const openCard = document.querySelector('.page.show .cards-left-wrapper');
+      const openCard = <HTMLDivElement>document.querySelector('.page.show .cards-left-wrapper');
 
       if (openCard) {
-        const firstGame = openCard.querySelectorAll('div')[0];
+        const firstGame = <HTMLDivElement>openCard.querySelector('div');
 
         firstGame.classList.add('open');
         cards.open(firstGame.dataset.type);
       }
     }
   },
-};
-
-const adjustCardWidth = () => {
-  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.all-cards')).forEach(card => (card.style.width = window.innerWidth <= 1024 ? '100%' : '80%'));
-  Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.cards-left-wrapper')).forEach(card => (card.style.width = window.innerWidth <= 768 ? '100%' : '50%'));
 };
 
 const unloadPage: Function = (newScreenID: string) => {

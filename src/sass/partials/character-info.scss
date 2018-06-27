@@ -1,0 +1,24 @@
+.input-group-addon,
+.form-control {
+  background-color: transparent;
+  border: none;
+}
+
+.form-control {
+  color: inherit;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+#avatar {
+  height: 56px;
+}
+
+#character-path,
+#race-class {
+  text-align: center;
+}
+
+#character-splash {
+  object-fit: cover;
+}

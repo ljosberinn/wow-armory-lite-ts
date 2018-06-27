@@ -56,10 +56,16 @@ export class BlizzardAPI {
     this.raceInformation = this.getRaceInformation(this.data.race);
     this.selectedRole = this.getSelectedTalents(this.data.talents);
 
-    this.setSplash(this.returnCharacterAvatar(this.region).replace('avatar', 'main'));
+    const avatarLink = this.returnCharacterAvatar(this.region);
+
+    this.setSplash(avatarLink.replace('avatar', 'main'));
+    this.setAvatar(avatarLink);
+    this.setSpecLogo();
     this.setCharacterPath();
     this.setRaceClass();
   }
+
+  returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
 
   setSplash = (url: string) => {
     const imgEl = <HTMLImageElement>document.getElementById('character-splash');
@@ -67,7 +73,9 @@ export class BlizzardAPI {
     imgEl.onload = () => switchTabToCharacter();
   };
 
-  returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
+  setAvatar = (url: string) => ((<HTMLImageElement>document.getElementById('avatar')).src = url);
+
+  setSpecLogo = () => ((<HTMLImageElement>document.getElementById('spec-logo')).src = this.selectedRole.icon);
 
   setCharacterPath = () => (<HTMLParagraphElement>document.getElementById('character-path')).innerText = `${this.character} @ ${this.region}–${this.realm}`;
 

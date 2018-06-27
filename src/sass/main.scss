@@ -22,6 +22,7 @@
 /* Pages */
 
 @import "pages/global";
+@import "partials/character-info";
 
 a {
   color: #ff628c;
@@ -29,6 +30,10 @@ a {
 
 a:visited {
   color: #3ad900;
+}
+
+a:hover, a:focus {
+  color: coral;
 }
 
 .clicked {
