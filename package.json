@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "parcel build index.html --no-minify",
+    "build": "parcel build index.html --no-minify --no-cache && sed -i .bk 's@=\"/@=\"@g' dist/index.html && rm dist/index.html.bk",
     "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "raven-js": "^3.26.3",
     "node-sass": "^4.9.0",

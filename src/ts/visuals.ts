@@ -189,6 +189,39 @@ const initializeCardOnClick = () => {
   });
 };
 
+const initializeTabSwitcher = () => {
+  const tabs = Array.from(<HTMLCollectionOf<HTMLDivElement>>document.querySelectorAll('.tabs'));
+
+  tabs.forEach(tabContainer => {
+    const tabNav = Array.from(<HTMLCollectionOf<HTMLDivElement>>tabContainer.querySelectorAll('.tabs-nav div'));
+    const tabContent = Array.from(<HTMLCollectionOf<HTMLDivElement>>tabContainer.querySelectorAll('.tabs-content div'));
+
+    tabNav.forEach(navEl => {
+      navEl.addEventListener('click', function () {
+
+        const _this = this;
+
+        tabNav.forEach(recursiveNavEl =>  {
+          if(recursiveNavEl === _this) {
+            recursiveNavEl.classList.add('active');
+          } else if(recursiveNavEl.classList.contains('active')) {
+            recursiveNavEl.classList.remove('active');
+          }
+        });
+
+        tabContent.forEach(content => {
+          const cList = content.classList;
+          if (content.id === this.dataset.target!) {
+            cList.add('active');
+          } else if (cList.contains('active')) {
+            cList.remove('active');
+          }
+        });
+      });
+    });
+  });
+};
+
 export const initVisuals = () => {
   document.addEventListener('DOMContentLoaded', () => {
     Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.card-right')).forEach(el => el.classList.add('open'));
@@ -198,6 +231,7 @@ export const initVisuals = () => {
     initializeFirstPageLoad();
     initializeSidebarHover();
     initializeCardOnClick();
+    initializeTabSwitcher();
 
     const gameEnabled = <HTMLElement>document.querySelector('.game-enabled');
     if (gameEnabled) {

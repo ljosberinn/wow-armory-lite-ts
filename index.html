@@ -7,8 +7,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="src/sass/main.scss">
   <title>wow-armory-lite-ts</title>
-  <script>const whTooltips = { colorLinks: false, iconizeLinks: true, renameLinks: false, iconSize: "small" };</script>
-  <script src="https://wow.zamimg.com/widgets/power.js"></script>
 </head>
 
 <body>
@@ -176,17 +174,21 @@
                 <span id="ci-ilvl-equipped"></span>
                 <span id="ci-ilvl-total"></span>
               </div>
-
               <div class="ci-items-33" id="ci-azerite-slots"></div>
-
               <div class="ci-items-25" id="ci-item-slots"></div>
-
               <div class="ci-items-50" id="ci-weapon-slots"></div>
-
-
             </div>
-            <div class="card-right-content col-xs-12">
-
+            <div class="card-right-content col-xs-12" id="ci-raid-container">
+              <div class="tabs">
+                <div class="tabs-nav">
+                  <div data-target="ci-raid-achv-legion" class="active">Legion</div>
+                  <div data-target="ci-raid-achv-bfa">Battle for Azeroth</div>
+                </div>
+                <div class="tabs-content">
+                  <div id="ci-raid-achv-legion" class="active"></div>
+                  <div id="ci-raid-achv-bfa"></div>
+                </div>
+              </div>
             </div>
             <div class="card-right-content col-xs-12">
 
@@ -347,7 +349,7 @@
     </div>
   </div>
   <!-- about end -->
-
+  <script>const whTooltips = { colorLinks: false, iconizeLinks: true, renameLinks: false, iconSize: "small" };</script>
   <script src="src/ts/app.ts"></script>
 </body>
 

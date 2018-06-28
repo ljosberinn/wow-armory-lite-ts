@@ -1,4 +1,20 @@
-import { AZERITE_SLOTS, BFA_FACTIONS, BFA_RAID_ACHIEVEMENTS, BFA_RAID_NAMES, CLASSES, ENCHANTABLES, ITEM_SLOTS, LEGION_FACTIONS, LEGION_RAID_ACHIEVEMENTS, LEGION_RAID_NAMES, MYTHIC_PLUS_ACHIEVEMENTS, MYTHIC_PLUS_ACHIEVEMENT_LEVELS, QUALITY_CLASSES, RACES, WEAPON_SLOTS } from './constants';
+import {
+  AZERITE_SLOTS,
+  BFA_FACTIONS,
+  BFA_RAID_ACHIEVEMENTS,
+  BFA_RAID_NAMES,
+  CLASSES,
+  ENCHANTABLES,
+  ITEM_SLOTS,
+  LEGION_FACTIONS,
+  LEGION_RAID_ACHIEVEMENTS,
+  LEGION_RAID_NAMES,
+  MYTHIC_PLUS_ACHIEVEMENTS,
+  MYTHIC_PLUS_ACHIEVEMENT_LEVELS,
+  QUALITY_CLASSES,
+  RACES,
+  WEAPON_SLOTS,
+} from './constants';
 import { getURLData, normalize, prettyPrintSeconds, returnURL, switchTabToCharacter, validateRegion } from './helperFunctions';
 
 export class BlizzardAPI {
@@ -11,6 +27,7 @@ export class BlizzardAPI {
   private raceInformation: { name: string; icon: string };
   private selectedRole: { specName: string; icon: string; role: string };
   private items: ICustomItemObj;
+  private raidAchievements: ICustomRaidAchievementObj;
 
   constructor(character: string, region: string, realm: string) {
     this.character = normalize.lowerCaseCapitalization(character);
@@ -31,6 +48,7 @@ export class BlizzardAPI {
     this.raceInformation = this.getRaceInformation(this.data.race);
     this.selectedRole = this.getSelectedTalents(this.data.talents);
     this.items = this.getEquippedItems(this.data.items);
+    this.raidAchievements = this.getRaidAchievements(this.data.achievements);
 
     const avatarLink = this.returnCharacterAvatar(this.region);
 
@@ -40,6 +58,15 @@ export class BlizzardAPI {
     this.setCharacterPath();
     this.setRaceClass();
     this.setItems();
+    this.setRaidAchievements();
+
+    this.appendTooltipScript();
+  };
+
+  appendTooltipScript = () => {
+    const script = document.createElement('script');
+    script.src = 'https://wow.zamimg.com/widgets/power.js';
+    document.body.appendChild(script);
   };
 
   returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;
@@ -152,7 +179,7 @@ export class BlizzardAPI {
     });
 
     // switch to full-width for single-wielding characters
-    if (typeof this.items.offHand === "undefined") weaponContainer.classList.replace('ci-items-50', 'ci-items-100');
+    if (typeof this.items.offHand === 'undefined') weaponContainer.classList.replace('ci-items-50', 'ci-items-100');
   };
 
   returnItemTemplate = (item: ICustomItemInfoObj) => {
@@ -190,7 +217,11 @@ export class BlizzardAPI {
       }
     });
 
-    return { level: highestMythicPlusAchievement, timestamp, age: `${prettyPrintSeconds((Date.now() - timestamp!) / 1000)} ago` };
+    return {
+      level: highestMythicPlusAchievement,
+      timestamp,
+      age: `${prettyPrintSeconds((Date.now() - timestamp!) / 1000)} ago`,
+    };
   };
 
   extractRaidAchievements = (achievementConst: number[], achievementContainer: IBlizzardAchievementsContainer): boolean[] => {
@@ -203,7 +234,7 @@ export class BlizzardAPI {
     return resultingArr;
   };
 
-  getPvERaidAchievements = (achievementContainer: IBlizzardAchievementsContainer): ICustomPvEAchievementObj => ({
+  getRaidAchievements = (achievementContainer: IBlizzardAchievementsContainer): ICustomRaidAchievementObj => ({
     Legion: {
       aotc: this.extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[0], achievementContainer),
       ce: this.extractRaidAchievements(LEGION_RAID_ACHIEVEMENTS[1], achievementContainer),
@@ -215,6 +246,37 @@ export class BlizzardAPI {
       names: BFA_RAID_NAMES,
     },
   });
+
+  setRaidAchievements = () => {
+    const legionTarget = <HTMLDivElement>document.getElementById('ci-raid-achv-legion');
+    const bfaTarget = <HTMLDivElement>document.getElementById('ci-raid-achv-bfa');
+
+    console.log(Object.entries(this.raidAchievements));
+
+    Object.entries(this.raidAchievements).forEach(expansion => {
+      const target = <HTMLDivElement>document.getElementById(`ci-raid-achv-${expansion[0].toLowerCase()}`);
+
+      expansion[1].names.forEach(name => {
+        target.insertAdjacentHTML('beforeend', `<div>${name}</div>`);
+      });
+
+      const achievementIDs = expansion[0] === "Legion" ? LEGION_RAID_ACHIEVEMENTS : BFA_RAID_ACHIEVEMENTS;
+      target.insertAdjacentHTML('beforeend', this.returnRaidAchievementMarkup(achievementIDs, expansion[1]));
+    });
+  };
+
+  returnRaidAchievementMarkup = (achievementIDs:number[][], container: ICustomRaidAchievementSubObj): string => {
+    let markup: string = '';
+
+    for (let i = 0; i < container.names.length; i += 1) {
+      markup += `<div>
+      <a href="https://wowhead.com/achievement=${achievementIDs[0][i]}" class="${container.aotc[i] ? 'success' : 'warning'}">AOTC</a>
+      <a href="https://wowhead.com/achievement=${achievementIDs[1][i]}" class="${container.ce[i] ? 'success' : 'warning'}">CE</a>
+      </div>`;
+    }
+
+    return markup;
+  };
 
   extractReputationProgress = (achievementContainer: IBlizzardAchievementsContainer, factionArray: IConstFactionObj[]): (number | undefined)[] => {
     const reputationArr: (number | undefined)[] = [];
@@ -249,6 +311,4 @@ export class BlizzardAPI {
       progress,
     };
   };
-
-  // returnCharacterSplash = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail.replace('avatar', 'main')}`;
 }

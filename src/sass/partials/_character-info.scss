@@ -116,3 +116,48 @@
   padding: 0.3em 0;
   text-align: center;
 }
+
+#avatar,
+#spec-logo {
+  border-radius: 5px;
+}
+
+.tabs-nav {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+#ci-raid-container {
+  padding: 0;
+}
+
+.tabs-nav div {
+  text-align: center;
+  cursor: pointer;
+}
+
+.tabs-content div {
+  text-align: center;
+}
+
+.tabs-nav > div:not(.active),
+.tabs-content > div:not(.active) {
+  background-color: #2d5e82;
+}
+
+#ci-raid-achv-legion,
+#ci-raid-achv-bfa {
+  display: grid;
+}
+
+#ci-raid-achv-legion {
+  grid-template-columns: 20% 20% 20% 20% 20%;
+}
+
+#ci-raid-achv-bfa {
+  grid-template-columns: 100%;
+}
+
+.tabs-content > div:not(.active) {
+  display: none !important;
+}

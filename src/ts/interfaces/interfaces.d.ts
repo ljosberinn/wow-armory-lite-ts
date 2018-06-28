@@ -174,11 +174,11 @@ interface ICustomMythicPlusAchievementObj {
   age: string | undefined;
 }
 
-interface ICustomPvEAchievementObj {
-  [key: string]: ICustomPvEAchievementSubObj;
+interface ICustomRaidAchievementObj {
+  [key: string]: ICustomRaidAchievementSubObj;
 }
 
-interface ICustomPvEAchievementSubObj {
+interface ICustomRaidAchievementSubObj {
   aotc: boolean[];
   ce: boolean[];
   names: string[];

@@ -10,8 +10,8 @@ Raven.context(() => {
 
 (async () => {
   // testing obj
-  const cObj: { character: string; region: string; realm: string } = { character: 'Shakib', region: 'US', realm: 'Turalyon' };
-  //const cObj: { character: string; region: string; realm: string } = { character: 'Jixzy', region: 'EU', realm: 'Blackmoore' };
+  // const cObj: { character: string; region: string; realm: string } = { character: 'Shakib', region: 'US', realm: 'Turalyon' };
+  const cObj: { character: string; region: string; realm: string } = { character: 'Jixzy', region: 'EU', realm: 'Blackmoore' };
 
   /* Blizzard API Access */
   console.log(await new BlizzardAPI(cObj.character, cObj.region, cObj.realm));
