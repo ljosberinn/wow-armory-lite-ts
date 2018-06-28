@@ -1,23 +1,7 @@
-.faction-exalted {
-  color: $exalted;
-}
-
-.faction-revered {
-  color: $revered;
-}
-
-.faction-honored {
-  color: $honored;
-}
-
-.faction-friendly {
-  color: $friendly;
-}
-
-.faction-neutral {
-  color: $neutral;
-}
-
-.faciton-factionnotmet {
-  color: $factionnotmet;
+$colors: cyan, #00ffcc, lime, #00ff88, yellow, coral;
+$names: "exalted", "revered", "friendly", "honored", "neutral", "factionnotmet";
+@for $i from 1 through length($colors) {
+  .faction-#{nth($names, $i)} {
+    color: nth($colors, $i);
+  }
 }

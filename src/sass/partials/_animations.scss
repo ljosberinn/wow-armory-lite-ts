@@ -39,56 +39,30 @@
   animation-duration: 800ms;
 }
 
-@keyframes glow-epic {
-  0%,
-  100% {
-    box-shadow: 0 0 5px $epic;
-  }
-  40%,
-  60% {
-    box-shadow: 0 0 25px $epic;
-  }
-}
-
-.button-glow-epic {
-  animation: glow-epic 5s infinite;
-}
-
-@keyframes glow-rare {
-  0%,
-  100% {
-    box-shadow: 0 0 5px $rare;
-  }
-  40%,
-  60% {
-    box-shadow: 0 0 25px $rare;
-  }
-}
-
-.button-glow-rare {
-  animation: glow-rare 5s infinite;
-}
-
-@keyframes glow-uncommon {
-  0%,
-  100% {
-    box-shadow: 0 0 5px $uncommon;
-  }
-  40%,
-  60% {
-    box-shadow: 0 0 25px $uncommon;
-  }
-}
-
-.button-glow-uncommon {
-  animation: glow-rare 5s infinite;
-}
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+  }
+}
+
+$colors: $heirloom, $artifact, $legendary, $epic, $rare, $uncommon, $common;
+$names: "heirloom", "artifact", "legendary", "epic", "rare", "uncommon", "common";
+@for $i from 1 through length($colors) {
+  .btn-glow-#{nth($names, $i)} {
+    animation: glow-#{nth($names, $i)} 5s infinite;
+  }
+
+  @keyframes glow-#{nth($names, $i)} {
+    0%,
+    100% {
+      box-shadow: 0 0 5px nth($colors, $i);
+    }
+    40%,
+    60% {
+      box-shadow: 0 0 25px nth($colors, $i);
+    }
   }
 }

@@ -222,6 +222,15 @@ const initializeTabSwitcher = () => {
   });
 };
 
+const initializeSearch = () => {
+  const form = <HTMLFormElement>document.getElementById('lookup');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    console.log(this);
+  });
+}
+
 export const initVisuals = () => {
   document.addEventListener('DOMContentLoaded', () => {
     Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.card-right')).forEach(el => el.classList.add('open'));
@@ -232,6 +241,7 @@ export const initVisuals = () => {
     initializeSidebarHover();
     initializeCardOnClick();
     initializeTabSwitcher();
+    initializeSearch();
 
     const gameEnabled = <HTMLElement>document.querySelector('.game-enabled');
     if (gameEnabled) {

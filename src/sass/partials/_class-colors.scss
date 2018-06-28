@@ -1,95 +1,11 @@
-.warrior {
-  color: $warrior;
-}
+$colors: #c79c6e, #f58cba, #abd473, #fff569, #fff, #69ccf0, #9482c9, #ff7d0a, #a330c9, #c41f3b, #0070de, #00ff96;
+$names: "warrior", "paladin", "hunter", "rogue", "priest", "mage", "warlock", "druid", "demonhunter", "deathknight", "shaman", "monk";
+@for $i from 1 through length($colors) {
+  .#{nth($names, $i)} {
+    color: nth($colors, $i);
+  }
 
-.warrior-bg {
-  background-color: $warrior;
-}
-
-.paladin {
-  color: $paladin;
-}
-
-.paladin-bg {
-  background-color: $paladin;
-}
-
-.hunter {
-  color: $hunter;
-}
-
-.hunter-bg {
-  background-color: $hunter;
-}
-
-.rogue {
-  color: $rogue;
-}
-
-.rogue-bg {
-  background-color: $rogue;
-}
-
-.priest {
-  color: $priest;
-}
-
-.priest-bg {
-  background-color: $priest;
-}
-
-.deathknight {
-  color: $deathknight;
-}
-
-.deathknight-bg {
-  background-color: $deathknight;
-}
-
-.shaman {
-  color: $shaman;
-}
-
-.shaman-bg {
-  background-color: $shaman;
-}
-
-.mage {
-  color: $mage;
-}
-
-.mage-bg {
-  background-color: $mage;
-}
-
-.warlock {
-  color: $warlock;
-}
-
-.warlock-bg {
-  background-color: $warlock;
-}
-
-.druid {
-  color: $druid;
-}
-
-.druid-bg {
-  background-color: $druid;
-}
-
-.demonhunter {
-  color: $demonhunter;
-}
-
-.demonhunter-bg {
-  background-color: $demonhunter;
-}
-
-.monk {
-  color: $monk;
-}
-
-.monk-bg {
-  background-color: $monk;
+  .#{nth($names, $i)}-bg {
+    background-color: nth($colors, $i);
+  }
 }
