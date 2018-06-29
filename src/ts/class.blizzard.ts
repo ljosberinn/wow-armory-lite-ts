@@ -29,10 +29,9 @@ export class BlizzardAPI {
   private items: ICustomItemObj;
   private raidAchievements: ICustomRaidAchievementObj;
 
-  constructor(character: string, region: string, realm: string) {
-    this.character = normalize.lowerCaseCapitalization(character);
-    this.region = validateRegion(region) ? normalize.upperCase(region) : '';
-    this.realm = normalize.lowerCaseCapitalization(realm);
+  constructor(cObj: ICharacterClassConstructorObj) {
+    Object.assign(this, cObj);
+    this.character = normalize.lowerCaseCapitalization(this.character);
 
     this.getData();
   }
@@ -260,12 +259,12 @@ export class BlizzardAPI {
         target.insertAdjacentHTML('beforeend', `<div>${name}</div>`);
       });
 
-      const achievementIDs = expansion[0] === "Legion" ? LEGION_RAID_ACHIEVEMENTS : BFA_RAID_ACHIEVEMENTS;
+      const achievementIDs = expansion[0] === 'Legion' ? LEGION_RAID_ACHIEVEMENTS : BFA_RAID_ACHIEVEMENTS;
       target.insertAdjacentHTML('beforeend', this.returnRaidAchievementMarkup(achievementIDs, expansion[1]));
     });
   };
 
-  returnRaidAchievementMarkup = (achievementIDs:number[][], container: ICustomRaidAchievementSubObj): string => {
+  returnRaidAchievementMarkup = (achievementIDs: number[][], container: ICustomRaidAchievementSubObj): string => {
     let markup: string = '';
 
     for (let i = 0; i < container.names.length; i += 1) {

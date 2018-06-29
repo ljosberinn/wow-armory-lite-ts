@@ -358,3 +358,9 @@ interface IRealmLookupObj {
   realms: string[];
   slugs: string[];
 }
+
+interface ICharacterClassConstructorObj {
+  character: string;
+  region: string;
+  realm: string;
+}

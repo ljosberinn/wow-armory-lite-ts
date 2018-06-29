@@ -7,23 +7,14 @@ export class WarcraftlogsAPI {
   private region: string;
   private realm: string;
 
-  constructor(character: string, region: string, realm: string) {
+  constructor(cObj: ICharacterClassConstructorObj) {
+    Object.assign(this, cObj);
     this.data = [];
-    this.character = character;
-
-    if (validateRegion(region)) {
-      this.region = region;
-    } else {
-      this.region = '';
-    }
-
-    this.realm = realm;
 
     const RAID_NAMES = LEGION_RAID_NAMES.concat(BFA_RAID_NAMES);
 
     (async () => {
-      this.data = [];
-      const URLS: string[] = returnURL.Warcraftlogs(character, region, realm);
+      const URLS: string[] = returnURL.Warcraftlogs(this.character, this.region, this.realm);
 
       URLS.forEach(async url => {
         this.data[URLS.indexOf(url)] = this.splitWarcraftlogsByDifficulty(<IWarcraftlogsAPIObject[]> await getURLData(url));
