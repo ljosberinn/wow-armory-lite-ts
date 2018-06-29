@@ -27,7 +27,13 @@
     <div class="hamburger-menu">
       <ul>
         <li>
-          <a href="#">PH</a>
+          <a href="#">Start</a>
+        </li>
+        <li>
+          <a href="#">Character</a>
+        </li>
+        <li>
+          <a href="#">About</a>
         </li>
       </ul>
     </div>
@@ -64,18 +70,17 @@
           </div>
         </div>
         <div class="cards-right-wrapper col-xs-12 col-md-8">
-          <form class="card-right ph_0_target_1 col-xs-12" id="lookup">
+          <form class="card-right ph_0_target_1 col-xs-12">
             <div class="card-right-content col-xs-12 input-group">
-              <span class="input-group-addon" id="lookup-character-info">Character</span>
-              <input class="form-control" id="lookup-character" name="lookup-character" aria-describedby="lookup-character-info">
+              <input class="form-control" id="lookup-character" name="lookup-character" placeholder="Character">
             </div>
 
             <div class="card-right-content col-xs-12 input-group">
-              <span class="input-group-addon" id="lookup-realm-info">Realm</span>
-              <input class="form-control" id="lookup-realm" name="lookup-character" aria-describedby="lookup-realm-info">
+              <input class="form-control" id="lookup-realm" name="lookup-character" placeholder="Realm" list="realms">
+              <datalist id="lookup-realms-dl"></datalist>
             </div>
 
-            <button class="btn btn-large button-glow-epic">Search</button>
+            <button class="btn btn-large" id="lookup-submit" disabled>Search</button>
           </form>
 
           <div class="card-right ph_0_target_2 col-xs-12">
@@ -114,8 +119,8 @@
               <span class="input-group-addon">
                 <img id="avatar" />
               </span>
-              <span class="form-control" id="character-path">Shakib @ US-Turalyon</span>
-              <span class="form-control" id="race-class">Blood Elf Vengeance Demon Hunter</span>
+              <span class="form-control" id="character-path">Name @ Region-Realm</span>
+              <span class="form-control" id="race-class">Race Spec Class</span>
               <span class="input-group-addon">
                 <img id="spec-logo" />
               </span>

@@ -1,3 +1,5 @@
+import * as REALMS from './realms.json';
+
 const tooltip = {
   showTooltip: (element: HTMLElement) => {
     element.insertAdjacentHTML('afterend', `<p class="customTooltip fadeIn200" style="width: ${element.dataset.tooltip!.length * 6 + 100}px;">${element.dataset.tooltip}</p>`);
@@ -198,13 +200,12 @@ const initializeTabSwitcher = () => {
 
     tabNav.forEach(navEl => {
       navEl.addEventListener('click', function () {
-
         const _this = this;
 
-        tabNav.forEach(recursiveNavEl =>  {
-          if(recursiveNavEl === _this) {
+        tabNav.forEach(recursiveNavEl => {
+          if (recursiveNavEl === _this) {
             recursiveNavEl.classList.add('active');
-          } else if(recursiveNavEl.classList.contains('active')) {
+          } else if (recursiveNavEl.classList.contains('active')) {
             recursiveNavEl.classList.remove('active');
           }
         });
@@ -222,14 +223,84 @@ const initializeTabSwitcher = () => {
   });
 };
 
-const initializeSearch = () => {
-  const form = <HTMLFormElement>document.getElementById('lookup');
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    console.log(this);
-  });
+interface IRealmsObject {
+  [key: number]: IRealmsRegionObject;
 }
+
+interface IRealmsRegionObject {
+  [key: number]: IRealmsRegionRealmObject;
+}
+
+interface IRealmsRegionRealmObject {
+  name: string;
+  slug: string;
+  ownerrealm: null | string;
+  sanitized: string;
+}
+
+const populateRealmArr = () => {
+  const defaultSubObj = Object.values(Object.entries(REALMS))[2][1];
+
+  const realms: string[] = [];
+  const slugs: string[] = [];
+
+  const regions = ['US', 'EU'];
+
+  defaultSubObj.forEach((region: IRealmsRegionObject) => {
+    const index = defaultSubObj.indexOf(region);
+
+    Object.values(region).forEach((realmObj: IRealmsRegionRealmObject) => {
+      realms.push(`${regions[index]}-${realmObj.name}`);
+      slugs.push(realmObj.slug);
+    });
+  });
+
+  return { realms, slugs };
+};
+
+const emptyDatalist = target => {
+  while (target.firstChild) {
+    target.removeChild(target.firstChild);
+  }
+};
+
+const appendToDatalist = (target: HTMLDataListElement, options: string[]) => {
+  options.forEach(option => {
+    target.insertAdjacentHTML('beforeend', `<option value="${option}">`);
+  });
+};
+
+const initializeSearch = () => {
+  const characterInput = <HTMLInputElement>document.getElementById('lookup-character');
+  const realmInput = <HTMLInputElement>document.getElementById('lookup-realm');
+  const realmList = <HTMLDataListElement>document.getElementById('lookup-realms-dl');
+
+  const realmLookupObj: { realms: string[]; slugs: string[] } = populateRealmArr();
+
+  characterInput.addEventListener('input', function () {
+    const currLen = this.value.length;
+    this.dataset.state = currLen >= 2 && currLen <= 12 ? 'valid' : 'invalid';
+    toggleButton(this.dataset.state, realmInput.dataset.state!);
+  });
+
+  realmInput.addEventListener('input', function () {
+    const regexp = new RegExp(this.value, 'i');
+    const foundRealms = realmLookupObj.realms.filter(realm => regexp.test(realm));
+
+    if (foundRealms.length > 0) {
+      this.dataset.state = 'valid';
+
+      emptyDatalist(realmList);
+      appendToDatalist(realmList, foundRealms);
+    } else {
+      this.dataset.state = 'invalid';
+    }
+
+    toggleButton(characterInput.dataset.state!, this.dataset.state);
+  });
+};
+
+const toggleButton = (cInputState: string, rInputState: string) => ((<HTMLButtonElement>document.getElementById('lookup-submit')).disabled = !(cInputState === 'valid' && rInputState === 'valid'));
 
 export const initVisuals = () => {
   document.addEventListener('DOMContentLoaded', () => {
