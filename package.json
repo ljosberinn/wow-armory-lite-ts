@@ -1,7 +1,7 @@
 {
   "name": "wow-armory-lite-ts",
   "version": "1.0.0",
-  "description": "",
+  "description": "lightweight character lookup tool for World of Warcraft: Battle for Azeroth, built upon several APIs",
   "main": "index.js",
   "scripts": {
     "build": "parcel build index.html --no-minify --no-cache && sed -i .bk 's@=\"/@=\"@g' dist/index.html && rm dist/index.html.bk",

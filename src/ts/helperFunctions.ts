@@ -95,3 +95,21 @@ const populateRealmArr = (): IRealmLookupObj => {
 };
 
 export const realmLookupObj: IRealmLookupObj = populateRealmArr();
+
+export const emptyDatalist = (target: HTMLDataListElement) => {
+  while (target.firstChild) {
+    target.removeChild(target.firstChild);
+  }
+};
+
+export const appendToLookupDatalist = (target: HTMLDataListElement, options: string[]) => {
+  const fragment = document.createDocumentFragment();
+
+  options.forEach(optionVal => {
+    const option = document.createElement('option');
+    option.value = optionVal;
+    fragment.appendChild(option);
+  });
+
+  target.appendChild(fragment);
+};

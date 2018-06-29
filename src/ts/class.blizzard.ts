@@ -28,6 +28,7 @@ export class BlizzardAPI {
   private selectedRole: { specName: string; icon: string; role: string };
   private items: ICustomItemObj;
   private raidAchievements: ICustomRaidAchievementObj;
+  private mythicPlusAchievements: ICustomMythicPlusAchievementObj;
 
   constructor(cObj: ICharacterClassConstructorObj) {
     Object.assign(this, cObj);
@@ -48,6 +49,7 @@ export class BlizzardAPI {
     this.selectedRole = this.getSelectedTalents(this.data.talents);
     this.items = this.getEquippedItems(this.data.items);
     this.raidAchievements = this.getRaidAchievements(this.data.achievements);
+    this.mythicPlusAchievements = this.getHighestMythicPlusAchievement(this.data.achievements);
 
     const avatarLink = this.returnCharacterAvatar(this.region);
 
@@ -58,9 +60,15 @@ export class BlizzardAPI {
     this.setRaceClass();
     this.setItems();
     this.setRaidAchievements();
+    this.setMythicPlusAchievements();
+
 
     this.appendTooltipScript();
   };
+
+  setMythicPlusAchievements = () => {
+    console.table(this.mythicPlusAchievements);
+  }
 
   appendTooltipScript = () => {
     const src = 'https://wow.zamimg.com/widgets/power.js';

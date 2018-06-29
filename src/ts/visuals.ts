@@ -1,6 +1,6 @@
 import { BlizzardAPI } from './class.blizzard';
 import { WarcraftlogsAPI } from './class.warcraftlogs';
-import { realmLookupObj} from './helperFunctions';
+import { realmLookupObj, emptyDatalist, appendToLookupDatalist } from './helperFunctions';
 
 const tooltip = {
   showTooltip: (element: HTMLElement) => {
@@ -90,7 +90,7 @@ const unloadPage: Function = (newScreenID: string) => {
   });
 };
 
-const page = {
+const page: { load: Function; unload: Function; loadWithoutAnimation: Function; flashImage: Function } = {
   load: (id: string) => {
     (<HTMLElement>document.querySelector(`.page.${id}`)).classList.toggle('shrink');
     setTimeout(() => {
@@ -182,7 +182,7 @@ const initializeFirstPageLoad = () => {
 
 const initializeCardOnClick = () => {
   Array.from(<HTMLCollectionOf<HTMLElement>>document.querySelectorAll('.card-left')).forEach(card => {
-    card.addEventListener('click', e => {
+    card.addEventListener('click', (e:Event) => {
       if (e.target!.localName === 'i') return;
 
       if (Array.from(document.querySelectorAll('.flag-recently-clicked')).length > 0) return;
@@ -225,34 +225,13 @@ const initializeTabSwitcher = () => {
   });
 };
 
-
-
-
-const emptyDatalist = (target: HTMLDataListElement) => {
-  while (target.firstChild) {
-    target.removeChild(target.firstChild);
-  }
-};
-
-const appendToLookupDatalist = (target: HTMLDataListElement, options: string[]) => {
-  const fragment = document.createDocumentFragment();
-
-  options.forEach(optionVal => {
-    const option = document.createElement('option');
-    option.value = optionVal;
-    fragment.appendChild(option);
-  });
-
-  target.appendChild(fragment);
-};
-
-
 const eventListeners = {
   CharacterInputEventListener: () => {
     const _this = <HTMLInputElement>document.getElementById('lookup-character');
     const currLen = _this.value.length;
+    
     _this.dataset.state = currLen >= 2 && currLen <= 12 ? 'valid' : 'invalid';
-    toggleButton(_this.dataset.state, (<HTMLInputElement>document.getElementById('lookup-realm')).dataset.state!);
+    eventListeners.toggleLookupButton(_this.dataset.state, (<HTMLInputElement>document.getElementById('lookup-realm')).dataset.state!);
   },
   realmInputEventListener: () => {
     const _this = <HTMLInputElement>document.getElementById('lookup-realm');
@@ -270,7 +249,7 @@ const eventListeners = {
         _this.dataset.state = 'invalid';
       }
 
-      toggleButton((<HTMLInputElement>document.getElementById('lookup-character')).dataset.state!, _this.dataset.state);
+      eventListeners.toggleLookupButton((<HTMLInputElement>document.getElementById('lookup-character')).dataset.state!, _this.dataset.state);
     }
   },
   lookupEventListener: (e: Event) => {
@@ -281,7 +260,7 @@ const eventListeners = {
 
     characterInput.removeEventListener('input', eventListeners.CharacterInputEventListener);
     realmInput.removeEventListener('input', eventListeners.realmInputEventListener);
-    toggleButton('invalid', 'invalid');
+    eventListeners.toggleLookupButton('invalid', 'invalid');
 
     const sanitizedRealm = realmLookupObj.slugs[realmLookupObj.realms.indexOf(realmInput.value)];
     const region = realmInput.value.split('-')[0];
@@ -294,21 +273,19 @@ const eventListeners = {
       };
 
       await Promise.all([new BlizzardAPI(cObj), new WarcraftlogsAPI(cObj)]).then(() => {
-
         characterInput.addEventListener('input', eventListeners.CharacterInputEventListener);
         realmInput.addEventListener('input', eventListeners.realmInputEventListener);
       });
     })();
-  }
-}
+  },
+  toggleLookupButton: (cInputState: string, rInputState: string) => ((<HTMLButtonElement>document.getElementById('lookup-submit')).disabled = !(cInputState === 'valid' && rInputState === 'valid')),
+};
 
 const initializeSearch = () => {
   (<HTMLInputElement>document.getElementById('lookup-character')).addEventListener('input', eventListeners.CharacterInputEventListener);
   (<HTMLInputElement>document.getElementById('lookup-realm')).addEventListener('input', eventListeners.realmInputEventListener);
   (<HTMLFormElement>document.getElementById('lookup-form')).addEventListener('submit', e => eventListeners.lookupEventListener(e));
 };
-
-const toggleButton = (cInputState: string, rInputState: string) => ((<HTMLButtonElement>document.getElementById('lookup-submit')).disabled = !(cInputState === 'valid' && rInputState === 'valid'));
 
 export const initVisuals = () => {
   document.addEventListener('DOMContentLoaded', () => {
