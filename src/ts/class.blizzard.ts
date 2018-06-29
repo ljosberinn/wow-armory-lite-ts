@@ -63,9 +63,13 @@ export class BlizzardAPI {
   };
 
   appendTooltipScript = () => {
-    const script = document.createElement('script');
-    script.src = 'https://wow.zamimg.com/widgets/power.js';
-    document.body.appendChild(script);
+    const src = 'https://wow.zamimg.com/widgets/power.js';
+
+    if (document.querySelector(`script[src="${src}"]`) === null) {
+      const script = document.createElement('script');
+      script.src = src;
+      document.body.appendChild(script);
+    }
   };
 
   returnCharacterAvatar = (region: string) => `https://render-${region}.worldofwarcraft.com/character/${this.data.thumbnail}`;

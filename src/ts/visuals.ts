@@ -328,6 +328,7 @@ const lookupEventListener = (e: Event) => {
     };
 
     await Promise.all([new BlizzardAPI(cObj), new WarcraftlogsAPI(cObj)]).then(() => {
+
       characterInput.addEventListener('input', CharacterInputEventListener);
       realmInput.addEventListener('input', realmInputEventListener);
     });

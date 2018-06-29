@@ -77,4 +77,7 @@ export const normalize = {
   upperCase: (word: string) => word.toUpperCase(),
 };
 
-export const switchTabToCharacter = () => (<HTMLUListElement>document.querySelector('[data-index="card_1"]')).click();
+export const switchTabToCharacter = () => {
+  (<HTMLUListElement>document.querySelector('[data-index="card_1"]')).click();
+  (<HTMLCollectionOf<HTMLUListElement>>document.getElementsByClassName('card_1'))[0].style.display = 'list-item';
+};
