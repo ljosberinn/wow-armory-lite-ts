@@ -1,4 +1,4 @@
-declare module "*.json" {
+declare module '*.json' {
   const value: any;
   export default value;
 }
@@ -352,4 +352,9 @@ interface IWarcraftlogsAPICleanSpec {
   historical_avg: number;
   historical_median: number;
   spec: string;
+}
+
+interface IRealmLookupObj {
+  realms: string[];
+  slugs: string[];
 }

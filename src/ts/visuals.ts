@@ -1,4 +1,5 @@
 import * as REALMS from './realms.json';
+import { BlizzardAPI } from './class.blizzard';
 
 const tooltip = {
   showTooltip: (element: HTMLElement) => {
@@ -238,7 +239,7 @@ interface IRealmsRegionRealmObject {
   sanitized: string;
 }
 
-const populateRealmArr = () => {
+const populateRealmArr = (): IRealmLookupObj => {
   const defaultSubObj = Object.values(Object.entries(REALMS))[2][1];
 
   const realms: string[] = [];
@@ -258,24 +259,39 @@ const populateRealmArr = () => {
   return { realms, slugs };
 };
 
-const emptyDatalist = target => {
+const emptyDatalist = (target: HTMLDataListElement) => {
   while (target.firstChild) {
     target.removeChild(target.firstChild);
   }
 };
 
-const appendToDatalist = (target: HTMLDataListElement, options: string[]) => {
-  options.forEach(option => {
-    target.insertAdjacentHTML('beforeend', `<option value="${option}">`);
+const appendToLookupDatalist = (target: HTMLDataListElement, options: string[]) => {
+  const fragment = document.createDocumentFragment();
+
+  options.forEach(optionVal => {
+    const option = document.createElement('option');
+    option.value = optionVal;
+    fragment.appendChild(option);
   });
+
+  target.appendChild(fragment);
 };
 
 const initializeSearch = () => {
+  const form = <HTMLFormElement>document.getElementById('lookup-form');
   const characterInput = <HTMLInputElement>document.getElementById('lookup-character');
   const realmInput = <HTMLInputElement>document.getElementById('lookup-realm');
   const realmList = <HTMLDataListElement>document.getElementById('lookup-realms-dl');
+  const realmLookupObj: IRealmLookupObj = populateRealmArr();
 
-  const realmLookupObj: { realms: string[]; slugs: string[] } = populateRealmArr();
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const sanitziedRealm = realmLookupObj.slugs[realmLookupObj.realms.indexOf(realmInput.value)];
+    const region = realmInput.value.split('-')[0];
+
+    new BlizzardAPI(characterInput.value, region, sanitziedRealm);
+  });
 
   characterInput.addEventListener('input', function () {
     const currLen = this.value.length;
@@ -284,19 +300,20 @@ const initializeSearch = () => {
   });
 
   realmInput.addEventListener('input', function () {
-    const regexp = new RegExp(this.value, 'i');
-    const foundRealms = realmLookupObj.realms.filter(realm => regexp.test(realm));
+    if (this.value.length > 3) {
+      const foundRealms = realmLookupObj.realms.filter(realm => new RegExp(this.value, 'i').test(realm));
 
-    if (foundRealms.length > 0) {
-      this.dataset.state = 'valid';
+      if (foundRealms.length > 0) {
+        this.dataset.state = 'valid';
 
-      emptyDatalist(realmList);
-      appendToDatalist(realmList, foundRealms);
-    } else {
-      this.dataset.state = 'invalid';
+        emptyDatalist(realmList);
+        appendToLookupDatalist(realmList, foundRealms);
+      } else {
+        this.dataset.state = 'invalid';
+      }
+
+      toggleButton(characterInput.dataset.state!, this.dataset.state);
     }
-
-    toggleButton(characterInput.dataset.state!, this.dataset.state);
   });
 };
 
