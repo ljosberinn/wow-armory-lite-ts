@@ -364,3 +364,17 @@ interface ICharacterClassConstructorObj {
   region: string;
   realm: string;
 }
+interface IRealmsObject {
+  [key: number]: IRealmsRegionObject;
+}
+
+interface IRealmsRegionObject {
+  [key: number]: IRealmsRegionRealmObject;
+}
+
+interface IRealmsRegionRealmObject {
+  name: string;
+  slug: string;
+  ownerrealm: null | string;
+  sanitized: string;
+}

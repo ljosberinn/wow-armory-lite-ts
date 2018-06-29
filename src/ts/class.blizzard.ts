@@ -15,7 +15,7 @@ import {
   RACES,
   WEAPON_SLOTS,
 } from './constants';
-import { getURLData, normalize, prettyPrintSeconds, returnURL, switchTabToCharacter, validateRegion } from './helperFunctions';
+import { getURLData, normalize, prettyPrintSeconds, returnURL, switchTabToCharacter } from './helperFunctions';
 
 export class BlizzardAPI {
   private data: IBlizzardAPIObject;

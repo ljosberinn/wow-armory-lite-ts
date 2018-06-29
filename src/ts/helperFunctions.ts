@@ -1,6 +1,6 @@
-import { RAID_IDS, REGIONS } from './constants';
-import * as REALMS from './realms.json';
+import { RAID_IDS } from './constants';
 import { API } from './secrets';
+import * as REALMS from './realms.json';
 
 export const returnURL = {
   Blizzard: (character: string, region: string, realm: string): string =>
@@ -62,15 +62,7 @@ export const prettyPrintSeconds = (s: number) => {
   return result;
 };
 
-export const validateRegion = (region: string) => REGIONS.includes(region);
-
 const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
-
-export const validateRealm = (region: string, realm: string) => {
-  const [sanitizedRealm, realmContainer] = [realm.toLowerCase().replace(/[áéíóú\- ']/g, ''), (<any>REALMS)[region]];
-
-  return Object.values(realmContainer).some(realmObj => realmObj.sanitized === sanitizedRealm);
-};
 
 export const normalize = {
   lowerCaseCapitalization: (word: string) => capitalize(word.toLowerCase()),
@@ -81,3 +73,25 @@ export const switchTabToCharacter = () => {
   (<HTMLUListElement>document.querySelector('[data-index="card_1"]')).click();
   (<HTMLCollectionOf<HTMLUListElement>>document.getElementsByClassName('card_1'))[0].style.display = 'list-item';
 };
+
+const populateRealmArr = (): IRealmLookupObj => {
+  const defaultSubObj = Object.values(Object.entries(REALMS))[2][1];
+
+  const realms: string[] = [];
+  const slugs: string[] = [];
+
+  const regions = ['US', 'EU'];
+
+  defaultSubObj.forEach((region: IRealmsRegionObject) => {
+    const index = defaultSubObj.indexOf(region);
+
+    Object.values(region).forEach((realmObj: IRealmsRegionRealmObject) => {
+      realms.push(`${regions[index]}-${realmObj.name}`);
+      slugs.push(realmObj.slug);
+    });
+  });
+
+  return { realms, slugs };
+};
+
+export const realmLookupObj: IRealmLookupObj = populateRealmArr();
